@@ -1,0 +1,16 @@
+# React / Node
+node_modules/
+dist/
+
+# Java / Spring Boot
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Python
+__pycache__/
+*.pyc
+
+# IDEs and OS
+.vscode/
+.idea/
+.DS_Store
