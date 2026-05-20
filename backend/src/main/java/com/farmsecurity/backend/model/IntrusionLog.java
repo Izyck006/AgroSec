@@ -14,14 +14,14 @@ public class IntrusionLog {
     private Long id;
 
     @Column(nullable = false)
-    private String intruderType; // e.g., "cow", "sheep", "person"
+    private String intruderType;
 
     @Column(nullable = false)
-    private Double confidence; // e.g., 87.5
+    private Double confidence; 
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
     @Column(nullable = false)
-    private String status; // "DETERRED" or "ACTIVE_BREACH"
+    private String status; // 
 }

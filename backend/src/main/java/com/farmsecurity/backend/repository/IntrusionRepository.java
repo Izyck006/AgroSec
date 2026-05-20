@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface IntrusionRepository extends JpaRepository<IntrusionLog, Long> {
-    // Custom query method to pull recent alerts for the frontend dashboard later
+    
     List<IntrusionLog> findTop10ByOrderByTimestampDesc();
 }

@@ -11,30 +11,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/alerts")
-@CrossOrigin(origins = "*") // Allows your React/JS frontend to fetch data seamlessly
+@CrossOrigin(origins = "*")
 public class IntrusionController {
 
     @Autowired
     private IntrusionRepository intrusionRepository;
 
-    /**
-     * Endpoint for the Phone-to-Edge script to submit real-time threat captures.
-     */
+
     @PostMapping
     public ResponseEntity<IntrusionLog> receiveIntrusionAlert(@RequestBody IntrusionLog log) {
-        // Automatically enforce server-side timestamp for accurate tracking
-        log.setTimestamp(LocalDateTime.now());
-        log.setStatus("DETERRED"); // Defaulting to deterred as edge code fires strobe lights instantly
         
+        log.setTimestamp(LocalDateTime.now());
+        log.setStatus("DETERRED"); 
         IntrusionLog savedLog = intrusionRepository.save(log);
         System.out.println("[SERVER LOG] High alert saved: " + savedLog.getIntruderType() + " detected at " + savedLog.getTimestamp());
         
         return ResponseEntity.ok(savedLog);
     }
 
-    /**
-     * Endpoint for the Frontend Dashboard to read the live system logs.
-     */
+  
     @GetMapping("/recent")
     public ResponseEntity<List<IntrusionLog>> getRecentLogs() {
         return ResponseEntity.ok(intrusionRepository.findTop10ByOrderByTimestampDesc());
