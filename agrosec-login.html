@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agrosec Farmer Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #0b110b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 380px;
+      padding: 2.5rem 2rem 2rem;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #e8f0e8;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.25rem;
+    }
+
+    .logo span { color: #6ab04c; }
+
+    .tagline {
+      font-size: 12px;
+      color: #4d6b4d;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4d6b4d;
+      margin-bottom: 6px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      background: #111a11;
+      border: 1px solid #1e2e1e;
+      border-radius: 6px;
+      padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: #e8f0e8;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 1.1rem;
+    }
+
+    input::placeholder { color: #2d422d; }
+
+    input:focus { border-color: #3d6b2a; }
+
+    input.err { border-color: #7a2020; }
+
+    .error-msg {
+      font-size: 11px;
+      color: #c0392b;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .error-msg.show { display: block; }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3a6b28;
+      border: none;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #e8f0e8;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    button:hover { background: #4d8a35; }
+    button:active { background: #2e5520; }
+    button:disabled { background: #1e3018; color: #3a5030; cursor: not-allowed; }
+
+    .footer {
+      position: fixed;
+      bottom: 1.5rem;
+      font-size: 11px;
+      color: #2a3d2a;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo">Agro<span>sec</span></div>
+    <div class="tagline">Admin Portal</div>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter username" autocomplete="username" />
+    <div class="error-msg" id="userErr">Username is required.</div>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter password" autocomplete="current-password" />
+    <div class="error-msg" id="passErr">Password is required.</div>
+    <div class="error-msg" id="authErr">Incorrect username or password.</div>
+
+    <button id="loginBtn" onclick="handleLogin()">Sign In</button>
+  </div>
+
+  <div class="footer">© Agrosec 2026</div>
+
+  <script>
+    
+    const VALID_USERNAME = 'admin';
+    const VALID_PASSWORD = 'admin123';
+
+    function handleLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const userErr  = document.getElementById('userErr');
+      const passErr  = document.getElementById('passErr');
+      const authErr  = document.getElementById('authErr');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const btn = document.getElementById('loginBtn');
+
+    
+      [userErr, passErr, authErr].forEach(el => el.classList.remove('show'));
+      [usernameInput, passwordInput].forEach(el => el.classList.remove('err'));
+
+      let valid = true;
+
+      if (!username) {
+        userErr.classList.add('show');
+        usernameInput.classList.add('err');
+        valid = false;
+      }
+
+      if (!password) {
+        passErr.classList.add('show');
+        passwordInput.classList.add('err');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+   
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      setTimeout(function () {
+        if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+         
+          btn.textContent = 'Access granted ✓';
+          btn.style.background = '#2d6b1a';
+        } else {
+          authErr.classList.add('show');
+          passwordInput.classList.add('err');
+          passwordInput.value = '';
+          passwordInput.focus();
+          btn.disabled = false;
+          btn.textContent = 'Sign In';
+        }
+      }, 800);
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+
+</body>
+</html>

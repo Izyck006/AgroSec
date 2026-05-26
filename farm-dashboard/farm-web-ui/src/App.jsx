@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dashboard from './Dashboard';
+import Login from './Login';
 
 function App() {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  
   return (
-    <div>
-      <Dashboard />
-    </div>
+    <>
+      {isAuthenticated ? (
+        <Dashboard />
+      ) : (
+        <Login onLoginSuccess={() => setIsAuthenticated(true)} />
+      )}
+    </>
   );
 }
 
