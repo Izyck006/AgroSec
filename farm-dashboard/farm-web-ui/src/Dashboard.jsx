@@ -8,7 +8,11 @@ const Dashboard = () => {
   
   const fetchAlerts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/alerts');
+      const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/alerts', {
+    headers: {
+        'ngrok-skip-browser-warning': 'true'
+    }
+});
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setAlerts(data);
