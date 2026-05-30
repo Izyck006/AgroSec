@@ -8,7 +8,7 @@ const Dashboard = () => {
   
   const fetchAlerts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/alerts/recent');
+      const response = await fetch('http://localhost:8080/api/alerts');
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setAlerts(data);
