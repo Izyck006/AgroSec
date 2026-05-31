@@ -4,7 +4,7 @@ import requests
 import winsound
 
 # For the system to connect to my phone camera
-IP_CAMERA_URL = "http://192.168.0.154:8080/video" 
+IP_CAMERA_URL = "http://192.168.0.199:8080/video" 
 TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
 API_URL = "https://reproach-sinner-femur.ngrok-free.dev/api/alerts"
 CONFIDENCE_THRESHOLD = 0.65
