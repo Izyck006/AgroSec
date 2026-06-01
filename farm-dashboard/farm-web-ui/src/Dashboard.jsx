@@ -69,7 +69,7 @@ const Dashboard = () => {
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-red-500">
             <h3 className="text-gray-500 text-sm font-semibold uppercase">Recent Intrusions</h3>
-            <p className="text-2xl font-bold text-gray-800 mt-2">{totalIntrusions > 0 ? 'Detected' : '0'}</p>
+            <p className="text-2xl font-bold text-gray-800 mt-2">{totalIntrusions}</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-orange-500">
             <h3 className="text-gray-500 text-sm font-semibold uppercase">Latest Threat</h3>
