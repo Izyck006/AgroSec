@@ -26,7 +26,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAlerts();
-    const interval = setInterval(fetchAlerts, 2000);
+    const interval = setInterval(fetchAlerts, 500);
     return () => clearInterval(interval); 
   }, []);
 

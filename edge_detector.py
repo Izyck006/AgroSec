@@ -27,7 +27,7 @@ def trigger_deterrent(detected_object, confidence_score, frame):
     
     thumbnail = cv2.resize(frame, (320, 240))
     
-    _, buffer = cv2.imencode('.jpg', thumbnail, [cv2.IMWRITE_JPEG_QUALITY, 30])
+    _, buffer = cv2.imencode('.jpg', thumbnail, [cv2.IMWRITE_JPEG_QUALITY, 15])
     
     base64_image = base64.b64encode(buffer).decode('utf-8')
     

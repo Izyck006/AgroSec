@@ -27,7 +27,7 @@ public class Alert {
     @Column(columnDefinition = "LONGTEXT")
     private String imageData;
 
-    // Getters and Setters
+   
     public Long getId() { return id; }
     public String getIntruderType() { return intruderType; }
     public void setIntruderType(String intruderType) { this.intruderType = intruderType; }
