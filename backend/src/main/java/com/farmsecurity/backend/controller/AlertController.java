@@ -1,12 +1,14 @@
 package com.farmsecurity.backend.controller;
 
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import com.farmsecurity.backend.model.Alert;
 import com.farmsecurity.backend.repository.AlertRepository;
 import com.farmsecurity.backend.service.TelegramNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/alerts")
@@ -17,21 +19,22 @@ public class AlertController {
     private AlertRepository alertRepository;
 
     @Autowired
-    private TelegramNotificationService telegramService; // Swapped to Telegram
+    private TelegramNotificationService telegramService; 
 
     @PostMapping
     public Alert createAlert(@RequestBody Alert newAlert) {
-        // 1. Save to Database
+       
         Alert savedAlert = alertRepository.save(newAlert);
         
-        // 2. Fire the Telegram Message!
+
         telegramService.sendIntrusionAlert(savedAlert.getIntruderType(), savedAlert.getConfidence());
         
         return savedAlert;
     }
-
     @GetMapping
-    public List<Alert> getAllAlerts() {
-        return alertRepository.findAll();
+    public List<Alert> getAllAlerts(){
+        List<Alert> allAlerts = alertRepository.findAll();
+        Collections.reverse(allAlerts);
+        return allAlerts.stream().limit(10).collect(Collectors.toList());
     }
 }
