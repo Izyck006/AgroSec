@@ -8,7 +8,7 @@ import threading
 # For the system to connect to my phone camera
 IP_CAMERA_URL = "http://192.168.0.154:8080/video" 
 TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
-API_URL = "https://reproach-sinner-femur.ngrok-free.dev/api/alerts"
+API_URL = "http://localhost:8080/api/alerts"
 CONFIDENCE_THRESHOLD = 0.65
 
 
@@ -71,7 +71,7 @@ while True:
     
 
     if current_time - last_inference_time > INFERENCE_INTERVAL:
-        last_inference_time = current_time # Reset timer
+        last_inference_time = current_time 
         
         frame_resized = cv2.resize(frame, (400, 300))
         (h, w) = frame_resized.shape[:2]
