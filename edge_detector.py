@@ -57,13 +57,25 @@ vs = cv2.VideoCapture(IP_CAMERA_URL)
 time.sleep(2.0)
 
 last_trigger_time = 0
-cooldown_period = 5  
+cooldown_period = 5 
+
+INFERENCE_INTERVAL = 0.5 
+last_inference_time = 0 
 
 while True:
     ret, frame = vs.read()
     if not ret:
         print("[ERROR] Failed to grab frame from phone camera. Checking connection...")
         break
+    
+    current_time = time.time()
+    
+    if current_time - last_inference_time > INFERENCE_INTERVAL:
+        
+        frame = cv2.resize(frame, (400, 300))
+        (h, w) = frame.shape[:2]
+        
+        
 
     frame = cv2.resize(frame, (400, 300))
     (h, w) = frame.shape[:2]
@@ -91,8 +103,9 @@ while True:
                 if current_time - last_trigger_time > cooldown_period:
                     trigger_deterrent(label, confidence, frame)
                     last_trigger_time = current_time
+                    last_inference_time = current_time
 
-    cv2.imshow("Edge Farm Monitor Feed", frame)
+    cv2.imshow("AgroSec Monitor Feed", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
