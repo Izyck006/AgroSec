@@ -5,7 +5,7 @@ import base64
 import winsound
 
 # For the system to connect to my phone camera
-IP_CAMERA_URL = "http://10.213.192.105:8080/video" 
+IP_CAMERA_URL = "http://192.168.0.154:8080/video" 
 TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
 API_URL = "https://reproach-sinner-femur.ngrok-free.dev/api/alerts"
 CONFIDENCE_THRESHOLD = 0.65
@@ -27,16 +27,16 @@ def trigger_deterrent(detected_object, confidence_score, frame):
     
     play_acoustic_deterrent()
 
-    # 1. Compress the frame into JPEG memory buffer
+    
     _, buffer = cv2.imencode('.jpg', frame)
     
-    # 2. Convert the byte buffer into a Base64 text string
+   
     base64_image = base64.b64encode(buffer).decode('utf-8')
 
     payload = {
         "intruderType": str(detected_object),
         "confidence": float(confidence_score * 100),
-        "imageData": base64_image # Sending the image text over the network
+        "imageData": base64_image 
     }
     
     try:
