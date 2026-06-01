@@ -1,6 +1,7 @@
 import cv2
 import time
 import requests
+import base64
 import winsound
 
 # For the system to connect to my phone camera
@@ -18,29 +19,33 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "sofa", "train", "tvmonitor"]
 
 def play_acoustic_deterrent():
-    """Plays a high-frequency alarm sound through the speaker to scare animals."""
     print("[ALERT] Activating physical deterrence audio...")
     winsound.Beep(2500, 1500)
 
-def trigger_deterrent(detected_object, confidence_score):
+def trigger_deterrent(detected_object, confidence_score, frame):
     print(f"\n[!!!] ALERT: {detected_object.upper()} DETECTED!")
     
-   
     play_acoustic_deterrent()
+
+    # 1. Compress the frame into JPEG memory buffer
+    _, buffer = cv2.imencode('.jpg', frame)
+    
+    # 2. Convert the byte buffer into a Base64 text string
+    base64_image = base64.b64encode(buffer).decode('utf-8')
 
     payload = {
         "intruderType": str(detected_object),
-        "confidence": float(confidence_score * 100)
+        "confidence": float(confidence_score * 100),
+        "imageData": base64_image # Sending the image text over the network
     }
     
-
     try:
-        response = requests.post(API_URL, json=payload, timeout=2)
+        response = requests.post(API_URL, json=payload, timeout=5)
         if response.status_code == 200:
-            print("[INFO] Successfully synced alert data to Spring Boot backend.")
+            print("[INFO] Successfully synced alert data and image to backend.")
     except requests.exceptions.RequestException:
-        print("[WARNING] Backend offline. Event queued in edge hardware storage.")
-
+        print("[WARNING] Backend offline.")
+        
 print("[INFO] Connecting to Phone Camera Stream...")
 vs = cv2.VideoCapture(IP_CAMERA_URL)
 time.sleep(2.0)
@@ -78,7 +83,7 @@ while True:
                 
                 current_time = time.time()
                 if current_time - last_trigger_time > cooldown_period:
-                    trigger_deterrent(label, confidence)
+                    trigger_deterrent(label, confidence, frame)
                     last_trigger_time = current_time
 
     cv2.imshow("Edge Farm Monitor Feed", frame)

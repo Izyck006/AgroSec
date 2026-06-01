@@ -5,14 +5,13 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  
   const fetchAlerts = async () => {
     try {
       const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/alerts', {
-    headers: {
-        'ngrok-skip-browser-warning': 'true'
-    }
-});
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
+        }
+      });
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setAlerts(data);
@@ -25,21 +24,18 @@ const Dashboard = () => {
     }
   };
 
-  
   useEffect(() => {
     fetchAlerts(); // Initial fetch
     const interval = setInterval(fetchAlerts, 5000);
     return () => clearInterval(interval); 
   }, []);
 
-  
   const formatTime = (timestamp) => {
     if (!timestamp) return 'Unknown Time';
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   };
 
-  
   const totalIntrusions = alerts.length;
   const recentIntruder = alerts.length > 0 ? alerts[0].intruderType.toUpperCase() : 'NONE';
 
@@ -83,6 +79,7 @@ const Dashboard = () => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-white text-gray-500 text-sm uppercase border-b">
+                    <th className="px-6 py-4 font-medium">Snapshot</th>
                     <th className="px-6 py-4 font-medium">Time</th>
                     <th className="px-6 py-4 font-medium">Intruder Type</th>
                     <th className="px-6 py-4 font-medium">AI Confidence</th>
@@ -92,18 +89,31 @@ const Dashboard = () => {
                 <tbody className="text-gray-700 divide-y divide-gray-100">
                   {alerts.length === 0 ? (
                     <tr>
-                      <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
                         No intrusions detected yet. The perimeter is secure.
                       </td>
                     </tr>
                   ) : (
                     alerts.map((alert) => (
                       <tr key={alert.id} className="hover:bg-gray-50 transition-colors">
+                        
+                        {/* NEW: Snapshot Image Column */}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {alert.imageData ? (
+                            <img 
+                              src={`data:image/jpeg;base64,${alert.imageData}`} 
+                              alt="Intruder Snapshot" 
+                              className="w-24 h-16 object-cover rounded border border-gray-200 shadow-sm hover:scale-150 transition-transform cursor-pointer"
+                            />
+                          ) : (
+                            <span className="text-xs text-gray-400 italic">No Image</span>
+                          )}
+                        </td>
+
                         <td className="px-6 py-4 whitespace-nowrap font-medium">
                           {formatTime(alert.timestamp)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap capitalize">
-                          {/* Visual indicator based on threat */}
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                             ${alert.intruderType === 'person' ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800'}`}>
                             {alert.intruderType}
