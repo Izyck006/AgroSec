@@ -24,7 +24,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "sofa", "train", "tvmonitor"]
 
 def play_acoustic_deterrent():
-    print("[ALERT] Activating physical presence deterrence audio...")
+    print("[ALERT] Activating deterrence audio...")
     winsound.Beep(2500, 1500)
 
 
@@ -32,9 +32,9 @@ def send_payload_in_background(payload):
     try:
         response = requests.post(API_URL, json=payload, timeout=10)
         if response.status_code == 200:
-            print("[INFO] Successfully synced alert data and image to backend.")
+            print("[INFO] Successfully synced alert, data and image to backend.")
     except requests.exceptions.RequestException:
-        print("[WARNING] Backend offline or Ngrok tunnel congested.")
+        print("[WARNING] Backend offline or congested.")
 
 def trigger_deterrent(detected_object, confidence_score, frame):
     print(f"\n[!!!] ALERT: {detected_object.upper()} DETECTED!")
@@ -54,7 +54,7 @@ def trigger_deterrent(detected_object, confidence_score, frame):
     thread = threading.Thread(target=send_payload_in_background, args=(payload,))
     thread.start()
 
-print("[INFO] Connecting to Phone Camera Stream...")
+print("[INFO] Connecting to Camera Stream...")
 vs = cv2.VideoCapture(2)
 time.sleep(2.0)
 
@@ -64,7 +64,7 @@ last_alert_time = 0
 while True:
     ret, frame = vs.read()
     if not ret:
-        print("[ERROR] Failed to grab frame from phone camera. Checking connection...")
+        print("[ERROR] Failed to grab frame from camera. Checking connection...")
         break
     
     current_time = time.time()
