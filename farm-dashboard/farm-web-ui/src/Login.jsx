@@ -42,8 +42,8 @@ const Login = ({ onLoginSuccess }) => {
   return (
     <div className="login-container">
       <div className="card">
-        <div className="logo">Agro<span>sec</span></div>
-        <div className="tagline">Admin Portal</div>
+        <div className="logo">Agro<span>Sec</span></div>
+        <div className="tagline">Farmer Portal</div>
 
         <label htmlFor="username">Username</label>
         <input

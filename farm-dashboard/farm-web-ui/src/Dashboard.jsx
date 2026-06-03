@@ -51,8 +51,10 @@ const Dashboard = () => {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-emerald-800 tracking-tight">
               Hey, Welcome Farmer!
             </h1>
-            <h1 className="text-2xl sm:text-2xl font-extrabold text-emerald-800 tracking-tight">
-              AgroSec
+            {/* Split color AgroSec branding */}
+            <h1 className="text-2xl sm:text-2xl font-extrabold tracking-tight">
+              <span className="text-[#e8f0e8]">Agro</span>
+              <span className="text-emerald-800">Sec</span>
             </h1>
             <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Farm Security & Intrusion Monitoring</p>
           </div>
