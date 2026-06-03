@@ -53,7 +53,7 @@ const Dashboard = () => {
             </h1>
             {/* Split color AgroSec branding */}
             <h1 className="text-2xl sm:text-2xl font-extrabold tracking-tight">
-              <span className="text-[#e8f0e8]">Agro</span>
+              <span className="text-[#638F63]">Agro</span>
               <span className="text-emerald-800">Sec</span>
             </h1>
             <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Farm Security & Intrusion Monitoring</p>
@@ -159,7 +159,7 @@ const Dashboard = () => {
           </div>
         </div>
         <footer className="mt-12 pb-6 text-center text-sm text-stone-500 font-medium">
-          &copy; 2026 AgroSec. Built for Smart Farm Security.
+          &copy; 2026 AgroSec.
         </footer>
       </div>
     </div>
