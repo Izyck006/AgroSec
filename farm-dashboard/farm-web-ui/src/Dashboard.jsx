@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   return (
     
-    <div className="min-h-screen bg-[#F4F7F5] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
+    <div className="min-h-screen bg-[#A3E6B9] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header Section - Clean white with soft shadows */}
@@ -87,7 +87,7 @@ const Dashboard = () => {
         {/* Alert Feed Table Section */}
         <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden flex flex-col">
           <div className="px-6 py-5 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
-            <h2 className="text-lg font-bold text-stone-800">Field Activity Logs</h2>
+            <h2 className="text-lg font-bold text-stone-800">Farm Activity Logs</h2>
             {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing...</span>}
           </div>
           
@@ -97,9 +97,9 @@ const Dashboard = () => {
                 <tr className="bg-stone-50 text-stone-500 text-xs font-bold tracking-widest uppercase border-b border-stone-200">
                   <th className="px-6 py-4">Snapshot</th>
                   <th className="px-6 py-4">Time</th>
-                  <th className="px-6 py-4">Detected Subject</th>
+                  <th className="px-6 py-4">Intrusion Type</th>
                   <th className="px-6 py-4">Confidence</th>
-                  <th className="px-6 py-4">Response Action</th>
+                  <th className="px-6 py-4">Action Taken</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
@@ -153,6 +153,9 @@ const Dashboard = () => {
             </table>
           </div>
         </div>
+      </div>
+      <div>
+        <footer>© Agrosec 2026</footer>
       </div>
     </div>
   );
