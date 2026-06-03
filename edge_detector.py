@@ -6,7 +6,7 @@ import winsound
 import threading 
 
 # For the system to connect to my phone camera
-IP_CAMERA_URL = "http://192.168.0.154:8080/video" 
+#IP_CAMERA_URL = "http://192.168.0.154:8080/video" 
 TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
 API_URL = "http://localhost:8080/api/alerts"
 CONFIDENCE_THRESHOLD = 0.65
@@ -55,7 +55,7 @@ def trigger_deterrent(detected_object, confidence_score, frame):
     thread.start()
 
 print("[INFO] Connecting to Phone Camera Stream...")
-vs = cv2.VideoCapture(IP_CAMERA_URL)
+vs = cv2.VideoCapture(2)
 time.sleep(2.0)
 
 last_inference_time = 0 
