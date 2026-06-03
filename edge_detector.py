@@ -3,17 +3,17 @@ import time
 import requests
 import base64
 import winsound
-import threading 
+import threading
+import sqlite3
 
-# For the system to connect to my phone camera
-#IP_CAMERA_URL = "http://192.168.0.154:8080/video" 
-TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
-API_URL = "http://localhost:8080/api/alerts"
+
+PRIMARY_API_URL = "http://localhost:8080/api/alerts"
+#To connect to phone camera
+#IP_CAMERA_URL = "http://192.168.0.154:8080/video"
+
+DB_FILENAME = "agrosec_cache.db"
 CONFIDENCE_THRESHOLD = 0.65
-
-
-INFERENCE_INTERVAL = 0.5
-GLOBAL_COOLDOWN = 7
+TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
 
 print("[INFO] Loading lightweight MobileNet-SSD model...")
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt", "MobileNetSSD_deploy.caffemodel")
@@ -23,55 +23,147 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
            "sofa", "train", "tvmonitor"]
 
-def play_acoustic_deterrent():
-    print("[ALERT] Activating deterrence audio...")
+def init_local_db():
+    try:
+        conn = sqlite3.connect(DB_FILENAME)
+        cursor = conn.cursor()
+        cursor.execute('''CREATE TABLE IF NOT EXISTS alerts_cache
+                         (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          intruderType TEXT,
+                          confidence REAL,
+                          imageData TEXT,
+                          timestamp TEXT)''')
+        conn.commit()
+        conn.close()
+        print("[INFO] Zero-Drop Local SQLite Cache Initialized.")
+    except Exception as e:
+        print(f"[ERROR] Could not initialize SQLite database: {e}")
+
+init_local_db()
+
+def save_alert_to_backup(alert_payload):
+    print(f"[BACKUP] Writing alert ({alert_payload['intruderType']}) to local SQLite database.")
+    try:
+        conn = sqlite3.connect(DB_FILENAME)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO alerts_cache (intruderType, confidence, imageData, timestamp) VALUES (?, ?, ?, ?)",
+                       (alert_payload['intruderType'],
+                        alert_payload['confidence'],
+                        alert_payload['imageData'],
+                        alert_payload['timestamp']))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[ERROR] Critical error writing to SQLite cache: {e}")
+
+
+def sync_cached_alerts_loop():
+    print("[SYNC] Starting background SQLite sync thread.")
+    while True:
+        time.sleep(15)
+
+        try:
+            conn = sqlite3.connect(DB_FILENAME)
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, intruderType, confidence, imageData, timestamp FROM alerts_cache ORDER BY timestamp ASC LIMIT 5")
+            rows = cursor.fetchall()
+
+            if rows:
+                print(f"[SYNC] Detected {len(rows)} alerts in offline cache. Primary backend might be online. Attempting sync...")
+                for row in rows:
+                    row_id = row[0]
+                    cached_payload = {
+                        "intruderType": row[1],
+                        "confidence": row[2],
+                        "imageData": row[3],
+                        "timestamp": row[4],
+                        "status": "Deterred (Synced)"
+                    }
+
+                    try:
+                        response = requests.post(PRIMARY_API_URL, json=cached_payload, timeout=5)
+                        if response.status_code == 200:
+                            cursor.execute("DELETE FROM alerts_cache WHERE id=?", (row_id,))
+                            conn.commit()
+                            print(f"[SYNC] Synced alert from {cached_payload['timestamp']} successfully. DELETED from cache.")
+                        else:
+                            print(f"[SYNC] Primary backend rejected alert (Status: {response.status_code}). Stopping sync loop.")
+                            break
+                    except requests.exceptions.RequestException:
+
+                        print("[SYNC] Primary backend still unreachable. Stopping sync loop.")
+                        break
+
+            conn.close()
+
+        except Exception as e:
+            print(f"[ERROR] Sync loop exception: {e}")
+
+sync_thread = threading.Thread(target=sync_cached_alerts_loop, daemon=True)
+sync_thread.start()
+
+
+def handle_detection(label, confidence, frame):
+    actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
+
+    print(f"\n[!!!] DETECTED: {label.upper()} ({actual_time})")
+
+    print("[ALERT] Activating physical deterrence audio...")
     winsound.Beep(2500, 1500)
 
 
-def send_payload_in_background(payload):
-    try:
-        response = requests.post(API_URL, json=payload, timeout=10)
-        if response.status_code == 200:
-            print("[INFO] Successfully synced alert, data and image to backend.")
-    except requests.exceptions.RequestException:
-        print("[WARNING] Backend offline or congested.")
-
-def trigger_deterrent(detected_object, confidence_score, frame):
-    print(f"\n[!!!] ALERT: {detected_object.upper()} DETECTED!")
-    
-    play_acoustic_deterrent()
-
-    thumbnail = cv2.resize(frame, (320, 240))
-    _, buffer = cv2.imencode('.jpg', thumbnail, [cv2.IMWRITE_JPEG_QUALITY, 20])
+    frame_resized = cv2.resize(frame, (320, 240)) # Thumbnail for faster sending
+    _, buffer = cv2.imencode('.jpg', frame_resized)
     base64_image = base64.b64encode(buffer).decode('utf-8')
 
-    payload = {
-        "intruderType": str(detected_object),
-        "confidence": float(confidence_score * 100),
-        "imageData": base64_image 
+    alert_payload = {
+        "intruderType": str(label),
+        "confidence": float(confidence * 100),
+        "imageData": base64_image,
+        "timestamp": actual_time,
+        "status": "Audio Alarm Triggered"
     }
 
-    thread = threading.Thread(target=send_payload_in_background, args=(payload,))
-    thread.start()
+   
+    print("[INFO] Attempting primary sync with backend...")
+    try:
+  
+        response = requests.post(PRIMARY_API_URL, json=alert_payload, timeout=10)
+
+        if response.status_code == 200:
+            print("[INFO] Synced to primary backend successfully.")
+        else:
+            print(f"[WARNING] Primary backend rejected send (Status: {response.status_code}). Saving to SQLite.")
+            save_alert_to_backup(alert_payload)
+
+    except requests.exceptions.Timeout:
+        print("[WARNING] Connection timed out (10s limit). Saving to backup cache.")
+        save_alert_to_backup(alert_payload)
+    except requests.exceptions.RequestException:
+        print("[WARNING] Primary backend unreachable. Saving to backup cache.")
+        save_alert_to_backup(alert_payload)
+
 
 print("[INFO] Connecting to Camera Stream...")
 vs = cv2.VideoCapture(2)
 time.sleep(2.0)
 
-last_inference_time = 0 
-last_alert_time = 0
+last_trigger_time = 0
+cooldown_period = 5 
+
+INFERENCE_INTERVAL = 0.5  
+last_inference_time = 0
 
 while True:
     ret, frame = vs.read()
     if not ret:
-        print("[ERROR] Failed to grab frame from camera. Checking connection...")
+        print("[ERROR] Failed to grab frame. Checking connection...")
         break
     
     current_time = time.time()
-    
-
+ 
     if current_time - last_inference_time > INFERENCE_INTERVAL:
-        last_inference_time = current_time 
+        last_inference_time = current_time # Reset the AI clock
         
         frame_resized = cv2.resize(frame, (400, 300))
         (h, w) = frame_resized.shape[:2]
@@ -79,8 +171,6 @@ while True:
         blob = cv2.dnn.blobFromImage(cv2.resize(frame_resized, (300, 300)), 0.007843, (300, 300), 127.5)
         net.setInput(blob)
         detections = net.forward()
-        
-        alert_triggered_this_frame = False
 
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
@@ -92,19 +182,16 @@ while True:
                 if label in TARGET_CLASSES:
                     box = detections[0, 0, i, 3:7] * [w, h, w, h]
                     (startX, startY, endX, endY) = box.astype("int")
+                    text = f"{label}: {confidence * 100:.2f}%"
+                    cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 0, 255), 2)
+                    cv2.putText(frame, text, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
                     
-                    display_text = f"{label}: {confidence * 100:.2f}%"
-                    cv2.rectangle(frame_resized, (startX, startY), (endX, endY), (0, 0, 255), 2)
-                    cv2.putText(frame_resized, display_text, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-                    
-                    if not alert_triggered_this_frame and (current_time - last_alert_time > GLOBAL_COOLDOWN):
-                        trigger_deterrent(label, confidence, frame_resized)
-                        last_alert_time = current_time
-                        alert_triggered_this_frame = True
-                        
-        frame = frame_resized
+                    if current_time - last_trigger_time > cooldown_period:
+                        detect_thread = threading.Thread(target=handle_detection, args=(label, confidence, frame.copy()))
+                        detect_thread.start()
+                        last_trigger_time = current_time
 
-    cv2.imshow("AgroSec Monitor Feed", frame)
+    cv2.imshow("Farm Monitor Feed", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
