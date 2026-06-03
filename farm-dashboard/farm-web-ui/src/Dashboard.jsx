@@ -40,87 +40,84 @@ const Dashboard = () => {
   const recentIntruder = alerts.length > 0 ? alerts[0].intruderType.toUpperCase() : 'NONE';
 
   return (
-    // The deep navy/slate background that makes it look like a command center
-    <div className="min-h-screen bg-[#0B1120] font-sans p-4 sm:p-6 lg:p-8 text-slate-200 selection:bg-blue-500/30">
+    
+    <div className="min-h-screen bg-[#F4F7F5] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
       <div className="max-w-6xl mx-auto space-y-8">
         
-        {/* Header Section - Glassmorphism effect */}
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-slate-700/50">
+        {/* Header Section - Clean white with soft shadows */}
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
           <div>
-            {/* Gradient glowing text for the logo */}
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-tight drop-shadow-sm">
+            {/* Deep forest green for the branding */}
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-emerald-800 tracking-tight">
               AgroSec
             </h1>
-            <p className="text-slate-400 font-medium mt-1 uppercase tracking-widest text-xs">Live Intrusion & Deterrence Command Center</p>
+            <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Farm Security & Intrusion Monitoring</p>
           </div>
           
-          {/* Neon Connection Status Badge */}
-          <div className={`flex items-center px-4 py-2 rounded-full border ${connectionWarning ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'} shadow-[0_0_15px_rgba(0,0,0,0.1)] transition-colors duration-300`}>
-            <span className={`flex h-2.5 w-2.5 rounded-full ${connectionWarning ? 'bg-amber-500 animate-pulse shadow-[0_0_8px_#f59e0b]' : 'bg-emerald-500 shadow-[0_0_8px_#10b981]'} mr-2`}></span>
-            <span className="text-xs font-bold tracking-widest uppercase">
-              {connectionWarning ? 'Reconnecting...' : 'System Live'}
+          {/* Crisp, professional connection badge */}
+          <div className={`flex items-center px-4 py-2 rounded-lg border ${connectionWarning ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'} transition-colors duration-300`}>
+            <span className={`flex h-2.5 w-2.5 rounded-full ${connectionWarning ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'} mr-2`}></span>
+            <span className="text-sm font-bold tracking-wide uppercase">
+              {connectionWarning ? 'Reconnecting Link...' : 'Node Active'}
             </span>
           </div>
         </header>
 
-        {/* Analytics Cards */}
+        {/* Analytics Cards - Grounded design with color-coded top borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Status Card */}
-          <div className="bg-slate-800/40 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-slate-700/50 relative overflow-hidden group hover:border-blue-500/50 transition-colors">
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-400 to-blue-600 shadow-[0_0_15px_#3b82f6]"></div>
-            <h3 className="text-slate-400 text-xs font-bold tracking-widest uppercase mb-1">System Status</h3>
-            <p className="text-3xl font-black text-blue-400 tracking-tight drop-shadow-md">ARMED</p>
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-emerald-500 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
+            <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">System Status</h3>
+            <p className="text-2xl font-black text-emerald-700 tracking-tight">ARMED</p>
           </div>
 
           {/* Intrusions Card */}
-          <div className="bg-slate-800/40 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-slate-700/50 relative overflow-hidden group hover:border-rose-500/50 transition-colors">
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-rose-400 to-rose-600 shadow-[0_0_15px_#f43f5e]"></div>
-            <h3 className="text-slate-400 text-xs font-bold tracking-widest uppercase mb-1">Total Intrusions</h3>
-            <p className="text-3xl font-black text-slate-100 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-stone-400 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
+            <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Total Intrusions</h3>
+            <p className="text-3xl font-black text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
           </div>
 
           {/* Threat Card */}
-          <div className="bg-slate-800/40 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-slate-700/50 relative overflow-hidden group hover:border-amber-500/50 transition-colors">
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-amber-400 to-amber-600 shadow-[0_0_15px_#f59e0b]"></div>
-            <h3 className="text-slate-400 text-xs font-bold tracking-widest uppercase mb-1">Latest Threat</h3>
-            <p className="text-3xl font-black text-slate-100 tracking-tight drop-shadow-md">{recentIntruder}</p>
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-amber-500 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
+            <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Latest Threat</h3>
+            <p className="text-3xl font-black text-amber-600 tracking-tight">{recentIntruder}</p>
           </div>
         </div>
 
         {/* Alert Feed Table Section */}
-        <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col">
-          <div className="px-6 py-5 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50">
-            <h2 className="text-lg font-bold text-slate-200">Recent Activity Logs</h2>
-            {loading && <span className="text-xs font-bold text-blue-400 animate-pulse tracking-widest uppercase bg-blue-500/10 px-3 py-1.5 rounded-md border border-blue-500/20">Syncing Data...</span>}
+        <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden flex flex-col">
+          <div className="px-6 py-5 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
+            <h2 className="text-lg font-bold text-stone-800">Field Activity Logs</h2>
+            {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing...</span>}
           </div>
           
           <div className="overflow-x-auto w-full">
             <table className="w-full min-w-[700px] text-left border-collapse">
               <thead>
-                <tr className="bg-slate-900/80 text-slate-400 text-xs font-bold tracking-widest uppercase border-b border-slate-700/50">
-                  <th className="px-6 py-5">Snapshot</th>
-                  <th className="px-6 py-5">Time</th>
-                  <th className="px-6 py-5">Intruder Type</th>
-                  <th className="px-6 py-5">AI Confidence</th>
-                  <th className="px-6 py-5">Action Taken</th>
+                <tr className="bg-stone-50 text-stone-500 text-xs font-bold tracking-widest uppercase border-b border-stone-200">
+                  <th className="px-6 py-4">Snapshot</th>
+                  <th className="px-6 py-4">Time</th>
+                  <th className="px-6 py-4">Detected Subject</th>
+                  <th className="px-6 py-4">Confidence</th>
+                  <th className="px-6 py-4">Response Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/50">
+              <tbody className="divide-y divide-stone-100">
                 {alerts.length === 0 && !loading ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-16 text-center text-slate-500 font-medium">
+                    <td colSpan="5" className="px-6 py-12 text-center text-stone-500 font-medium bg-stone-50/30">
                       <div className="flex flex-col items-center justify-center">
-                        <svg className="w-12 h-12 mb-3 text-slate-600 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                        No intrusions detected yet. Perimeter is absolutely secure.
+                        <svg className="w-10 h-10 mb-3 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        No movement detected. The farm perimeter is clear.
                       </div>
                     </td>
                   </tr>
                 ) : (
                   alerts.map((alert) => (
-                    <tr key={alert.id} className="hover:bg-slate-700/20 transition-colors duration-200">
+                    <tr key={alert.id} className="hover:bg-stone-50 transition-colors duration-150">
                       <td className="px-6 py-4 whitespace-nowrap">
                         {alert.imageData ? (
-                          <div className="relative w-24 h-16 rounded-lg overflow-hidden border border-slate-600 shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:scale-150 hover:shadow-2xl hover:z-10 transition-all cursor-pointer">
+                          <div className="relative w-24 h-16 rounded overflow-hidden border border-stone-200 shadow-sm hover:scale-125 transition-transform cursor-pointer origin-left z-10">
                             <img 
                               src={`data:image/jpeg;base64,${alert.imageData}`} 
                               alt="Intruder Snapshot" 
@@ -128,24 +125,24 @@ const Dashboard = () => {
                             />
                           </div>
                         ) : (
-                          <span className="text-xs font-medium text-slate-500 italic bg-slate-800 px-3 py-1.5 rounded-md border border-slate-700">No Image Feed</span>
+                          <span className="text-xs font-medium text-stone-400 italic bg-stone-100 px-2 py-1 rounded border border-stone-200">No Image</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap font-medium text-slate-300 font-mono text-sm">
+                      <td className="px-6 py-4 whitespace-nowrap font-semibold text-stone-600 text-sm">
                         {formatTime(alert.timestamp)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-widest border
-                          ${alert.intruderType === 'person' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wide border
+                          ${alert.intruderType === 'person' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
                           {alert.intruderType}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap font-mono text-sm text-slate-300">
+                      <td className="px-6 py-4 whitespace-nowrap font-medium text-stone-600 text-sm">
                         {alert.confidence.toFixed(1)}%
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center text-emerald-400 font-bold text-xs tracking-widest uppercase bg-emerald-500/10 px-3 py-1.5 rounded-md border border-emerald-500/20">
-                          <svg className="w-4 h-4 mr-1.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <span className="inline-flex items-center text-emerald-700 font-bold text-xs tracking-wide uppercase">
+                          <svg className="w-4 h-4 mr-1.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                           {alert.status}
                         </span>
                       </td>
