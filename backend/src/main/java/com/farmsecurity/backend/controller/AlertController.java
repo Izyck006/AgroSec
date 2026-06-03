@@ -35,6 +35,6 @@ public class AlertController {
     public List<Alert> getAllAlerts(){
         List<Alert> allAlerts = alertRepository.findAll();
         Collections.reverse(allAlerts);
-        return allAlerts.stream().limit(5).collect(Collectors.toList());
+        return allAlerts.stream().limit(20).collect(Collectors.toList());
     }
 }

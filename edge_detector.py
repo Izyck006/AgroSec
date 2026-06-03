@@ -12,7 +12,7 @@ PRIMARY_API_URL = "http://localhost:8080/api/alerts"
 #IP_CAMERA_URL = "http://192.168.0.154:8080/video"
 
 DB_FILENAME = "agrosec_cache.db"
-CONFIDENCE_THRESHOLD = 0.65
+CONFIDENCE_THRESHOLD = 0.85
 TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
 
 print("[INFO] Loading lightweight MobileNet-SSD model...")
@@ -112,7 +112,7 @@ def handle_detection(label, confidence, frame):
     winsound.Beep(2500, 1500)
 
 
-    frame_resized = cv2.resize(frame, (320, 240)) # Thumbnail for faster sending
+    frame_resized = cv2.resize(frame, (320, 240))
     _, buffer = cv2.imencode('.jpg', frame_resized)
     base64_image = base64.b64encode(buffer).decode('utf-8')
 
