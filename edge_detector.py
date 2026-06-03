@@ -1,3 +1,4 @@
+import numpy as np
 import cv2
 import time
 import requests
@@ -5,7 +6,6 @@ import base64
 import winsound
 import threading
 import sqlite3
-
 
 PRIMARY_API_URL = "http://localhost:8080/api/alerts"
 #To connect to phone camera
@@ -56,12 +56,10 @@ def save_alert_to_backup(alert_payload):
     except Exception as e:
         print(f"[ERROR] Critical error writing to SQLite cache: {e}")
 
-
 def sync_cached_alerts_loop():
     print("[SYNC] Starting background SQLite sync thread.")
     while True:
         time.sleep(15)
-
         try:
             conn = sqlite3.connect(DB_FILENAME)
             cursor = conn.cursor()
@@ -90,27 +88,21 @@ def sync_cached_alerts_loop():
                             print(f"[SYNC] Primary backend rejected alert (Status: {response.status_code}). Stopping sync loop.")
                             break
                     except requests.exceptions.RequestException:
-
                         print("[SYNC] Primary backend still unreachable. Stopping sync loop.")
                         break
-
             conn.close()
-
         except Exception as e:
             print(f"[ERROR] Sync loop exception: {e}")
 
 sync_thread = threading.Thread(target=sync_cached_alerts_loop, daemon=True)
 sync_thread.start()
 
-
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-
     print(f"\n[!!!] DETECTED: {label.upper()} ({actual_time})")
-
+    
     print("[ALERT] Activating physical deterrence audio...")
     winsound.Beep(2500, 1500)
-
 
     frame_resized = cv2.resize(frame, (320, 240))
     _, buffer = cv2.imencode('.jpg', frame_resized)
@@ -123,19 +115,15 @@ def handle_detection(label, confidence, frame):
         "timestamp": actual_time,
         "status": "Audio Alarm Triggered"
     }
-
    
     print("[INFO] Attempting primary sync with backend...")
     try:
-  
         response = requests.post(PRIMARY_API_URL, json=alert_payload, timeout=10)
-
         if response.status_code == 200:
             print("[INFO] Synced to primary backend successfully.")
         else:
             print(f"[WARNING] Primary backend rejected send (Status: {response.status_code}). Saving to SQLite.")
             save_alert_to_backup(alert_payload)
-
     except requests.exceptions.Timeout:
         print("[WARNING] Connection timed out (10s limit). Saving to backup cache.")
         save_alert_to_backup(alert_payload)
@@ -150,7 +138,6 @@ time.sleep(2.0)
 
 last_trigger_time = 0
 cooldown_period = 5 
-
 INFERENCE_INTERVAL = 0.5  
 last_inference_time = 0
 
@@ -162,13 +149,18 @@ while True:
     
     current_time = time.time()
  
+   
+    (original_h, original_w) = frame.shape[:2]
+    new_width = 640
+    new_height = int((new_width / original_w) * original_h)
+    frame = cv2.resize(frame, (new_width, new_height))
+    (h, w) = frame.shape[:2]
+    
+    
     if current_time - last_inference_time > INFERENCE_INTERVAL:
-        last_inference_time = current_time # Reset the AI clock
+        last_inference_time = current_time 
         
-        frame_resized = cv2.resize(frame, (400, 300))
-        (h, w) = frame_resized.shape[:2]
-        
-        blob = cv2.dnn.blobFromImage(cv2.resize(frame_resized, (300, 300)), 0.007843, (300, 300), 127.5)
+        blob = cv2.dnn.blobFromImage(frame, 0.007843, (300, 300), 127.5)
         net.setInput(blob)
         detections = net.forward()
 
@@ -180,9 +172,10 @@ while True:
                 label = CLASSES[class_id]
 
                 if label in TARGET_CLASSES:
-                    box = detections[0, 0, i, 3:7] * [w, h, w, h]
+                    box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                     (startX, startY, endX, endY) = box.astype("int")
                     text = f"{label}: {confidence * 100:.2f}%"
+                    
                     cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 0, 255), 2)
                     cv2.putText(frame, text, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
                     

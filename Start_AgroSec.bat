@@ -15,7 +15,7 @@ echo [2/3] Launching Permanent Ngrok Tunnel...
 start cmd /k "ngrok http --domain=reproach-sinner-femur.ngrok-free.dev 8080"
 
 
-timeout /t 20
+timeout /t 18
 
 echo [3/3] Launching Python Edge AI Camera Node...
 
