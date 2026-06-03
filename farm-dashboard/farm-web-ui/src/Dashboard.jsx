@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   return (
     
-    <div className="min-h-screen bg-[#A3E6B9] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
+    <div className="min-h-screen bg-[#E9F7ED] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header Section - Clean white with soft shadows */}
