@@ -155,7 +155,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div>
-        <footer>© Agrosec 2026</footer>
+        © Agrosec 2026
       </div>
     </div>
   );
