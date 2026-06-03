@@ -8,7 +8,7 @@ echo [1/3] Launching Spring Boot Backend...
 
 start cmd /k "cd /d C:\Users\T470\Downloads\Project\backend && .\mvnw.cmd spring-boot:run"
 
-timeout /t 20
+timeout /t 25
 
 echo [2/3] Launching Permanent Ngrok Tunnel...
 
