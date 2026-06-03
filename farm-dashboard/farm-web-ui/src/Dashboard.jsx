@@ -61,7 +61,7 @@ const Dashboard = () => {
           <div className={`flex items-center px-4 py-2 rounded-lg border ${connectionWarning ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'} transition-colors duration-300`}>
             <span className={`flex h-2.5 w-2.5 rounded-full ${connectionWarning ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'} mr-2`}></span>
             <span className="text-sm font-bold tracking-wide uppercase">
-              {connectionWarning ? 'Reconnecting Link...' : 'Node Active'}
+              {connectionWarning ? 'Reconnecting Link...' : 'Active'}
             </span>
           </div>
         </header>
@@ -156,9 +156,9 @@ const Dashboard = () => {
             </table>
           </div>
         </div>
-      </div>
-      <div>
-        © Agrosec 2026
+        <footer className="mt-12 pb-6 text-center text-sm text-stone-500 font-medium">
+          &copy; 2026 AgroSec. Built for Smart Farm Security.
+        </footer>
       </div>
     </div>
   );
