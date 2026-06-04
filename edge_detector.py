@@ -13,7 +13,8 @@ PRIMARY_API_URL = "http://localhost:8080/api/alerts"
 
 DB_FILENAME = "agrosec_cache.db"
 CONFIDENCE_THRESHOLD = 0.85
-TARGET_CLASSES = ["person", "cow", "sheep", "horse", "dog"]
+# REMOVED: dog and horse
+TARGET_CLASSES = ["person", "cow", "sheep"]
 
 print("[INFO] Loading lightweight MobileNet-SSD model...")
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt", "MobileNetSSD_deploy.caffemodel")
@@ -35,7 +36,7 @@ def init_local_db():
                           timestamp TEXT)''')
         conn.commit()
         conn.close()
-        print("[INFO] Zero-Drop Local SQLite Cache Initialized.")
+        print("[INFO] Local SQLite Cache Initialized.")
     except Exception as e:
         print(f"[ERROR] Could not initialize SQLite database: {e}")
 
@@ -55,6 +56,7 @@ def save_alert_to_backup(alert_payload):
         conn.close()
     except Exception as e:
         print(f"[ERROR] Critical error writing to SQLite cache: {e}")
+
 
 def sync_cached_alerts_loop():
     print("[SYNC] Starting background SQLite sync thread.")
@@ -97,12 +99,23 @@ def sync_cached_alerts_loop():
 sync_thread = threading.Thread(target=sync_cached_alerts_loop, daemon=True)
 sync_thread.start()
 
+
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
     print(f"\n[!!!] DETECTED: {label.upper()} ({actual_time})")
     
-    print("[ALERT] Activating physical deterrence audio...")
-    winsound.Beep(2500, 1500)
+    status_message = "Audio Deterrent Triggered"
+
+    if label == "person":
+        print("[ALERT] Human detected! Activating dog deterrence...")
+        status_message = "Dog Bark Triggered"
+        winsound.PlaySound("dog_bark.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
+        
+    elif label in ["cow", "sheep"]:
+        print(f"[ALERT] Livestock ({label}) detected! Activating predator deterrence...")
+        status_message = "Hyena Audio Triggered"
+        winsound.PlaySound("hyena.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
+
 
     frame_resized = cv2.resize(frame, (320, 240))
     _, buffer = cv2.imencode('.jpg', frame_resized)
@@ -113,7 +126,7 @@ def handle_detection(label, confidence, frame):
         "confidence": float(confidence * 100),
         "imageData": base64_image,
         "timestamp": actual_time,
-        "status": "Audio Alarm Triggered"
+        "status": status_message
     }
    
     print("[INFO] Attempting primary sync with backend...")
@@ -149,13 +162,11 @@ while True:
     
     current_time = time.time()
  
-   
     (original_h, original_w) = frame.shape[:2]
     new_width = 640
     new_height = int((new_width / original_w) * original_h)
     frame = cv2.resize(frame, (new_width, new_height))
     (h, w) = frame.shape[:2]
-    
     
     if current_time - last_inference_time > INFERENCE_INTERVAL:
         last_inference_time = current_time 
