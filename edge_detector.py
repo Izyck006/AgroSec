@@ -146,7 +146,7 @@ def handle_detection(label, confidence, frame):
 
 
 print("[INFO] Connecting to Camera Stream...")
-vs = cv2.VideoCapture(2)
+vs = cv2.VideoCapture(1)
 time.sleep(2.0)
 
 last_trigger_time = 0
