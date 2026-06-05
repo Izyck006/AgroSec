@@ -16,7 +16,7 @@ CONFIDENCE_THRESHOLD = 0.85
 
 TARGET_CLASSES = ["person", "cow", "sheep"]
 
-print("[INFO] Loading lightweight MobileNet-SSD model...")
+print("[INFO] Loading MobileNet-SSD model...")
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt", "MobileNetSSD_deploy.caffemodel")
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -43,7 +43,7 @@ def init_local_db():
 init_local_db()
 
 def save_alert_to_backup(alert_payload):
-    print(f"[BACKUP] Writing alert ({alert_payload['intruderType']}) to local SQLite database.")
+    print(f"[BACKUP] Writing alert ({alert_payload['intruderType']}) to database.")
     try:
         conn = sqlite3.connect(DB_FILENAME)
         cursor = conn.cursor()
@@ -69,7 +69,7 @@ def sync_cached_alerts_loop():
             rows = cursor.fetchall()
 
             if rows:
-                print(f"[SYNC] Detected {len(rows)} alerts in offline cache. Backend might be online. Attempting sync...")
+                print(f"[SYNC] Detected {len(rows)} alerts in offline cache. Backend may be back. Attempting sync...")
                 for row in rows:
                     row_id = row[0]
                     cached_payload = {
@@ -85,7 +85,7 @@ def sync_cached_alerts_loop():
                         if response.status_code == 200:
                             cursor.execute("DELETE FROM alerts_cache WHERE id=?", (row_id,))
                             conn.commit()
-                            print(f"[SYNC] Synced alert from {cached_payload['timestamp']} successfully. DELETED from cache.")
+                            print(f"[SYNC] Synced alert from {cached_payload['timestamp']} successfully.")
                         else:
                             print(f"[SYNC] Backend rejected alert (Status: {response.status_code}). Stopping sync loop.")
                             break
@@ -102,7 +102,7 @@ sync_thread.start()
 
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-    print(f"\n[!!!] DETECTED: {label.upper()} ({actual_time})")
+    print(f"\n[!!!] DETECTED A: {label.upper()} ({actual_time})")
     
     status_message = "Audio Deterrent"
 
@@ -129,7 +129,7 @@ def handle_detection(label, confidence, frame):
         "status": status_message
     }
    
-    print("[INFO] Attempting primary sync with backend...")
+    print("[INFO] Attempting sync with backend...")
     try:
         response = requests.post(PRIMARY_API_URL, json=alert_payload, timeout=10)
         if response.status_code == 200:

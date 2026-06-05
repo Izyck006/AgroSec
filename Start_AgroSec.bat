@@ -22,6 +22,6 @@ echo [3/3] Launching Python Edge AI Camera Node...
 start cmd /k "cd /d C:\Users\T470\Downloads\Project && python edge_detector.py"
 
 echo ===================================================
-echo         ALL SYSTEMS ARE LIVE AND DEPLOYED!
+echo         ALL SYSTEMS ARE LIVE
 echo ===================================================
 pause
