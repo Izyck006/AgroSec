@@ -13,7 +13,7 @@ PRIMARY_API_URL = "http://localhost:8080/api/alerts"
 
 DB_FILENAME = "agrosec_cache.db"
 CONFIDENCE_THRESHOLD = 0.85
-# REMOVED: dog and horse
+
 TARGET_CLASSES = ["person", "cow", "sheep"]
 
 print("[INFO] Loading lightweight MobileNet-SSD model...")
@@ -69,7 +69,7 @@ def sync_cached_alerts_loop():
             rows = cursor.fetchall()
 
             if rows:
-                print(f"[SYNC] Detected {len(rows)} alerts in offline cache. Primary backend might be online. Attempting sync...")
+                print(f"[SYNC] Detected {len(rows)} alerts in offline cache. Backend might be online. Attempting sync...")
                 for row in rows:
                     row_id = row[0]
                     cached_payload = {
@@ -87,10 +87,10 @@ def sync_cached_alerts_loop():
                             conn.commit()
                             print(f"[SYNC] Synced alert from {cached_payload['timestamp']} successfully. DELETED from cache.")
                         else:
-                            print(f"[SYNC] Primary backend rejected alert (Status: {response.status_code}). Stopping sync loop.")
+                            print(f"[SYNC] Backend rejected alert (Status: {response.status_code}). Stopping sync loop.")
                             break
                     except requests.exceptions.RequestException:
-                        print("[SYNC] Primary backend still unreachable. Stopping sync loop.")
+                        print("[SYNC] Backend still unreachable. Stopping sync loop.")
                         break
             conn.close()
         except Exception as e:
@@ -104,16 +104,16 @@ def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
     print(f"\n[!!!] DETECTED: {label.upper()} ({actual_time})")
     
-    status_message = "Audio Deterrent Triggered"
+    status_message = "Audio Deterrent"
 
     if label == "person":
-        print("[ALERT] Human detected! Activating dog deterrence...")
-        status_message = "Dog Bark Triggered"
+        print("[ALERT] Human detected! Activating dog bark...")
+        status_message = "Dog Bark"
         winsound.PlaySound("dog_bark.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
         
     elif label in ["cow", "sheep"]:
-        print(f"[ALERT] Livestock ({label}) detected! Activating predator deterrence...")
-        status_message = "Hyena Audio Triggered"
+        print(f"[ALERT] Livestock ({label}) detected! Activating predator sound...")
+        status_message = "Hyena Audio"
         winsound.PlaySound("hyena.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
 
 
@@ -135,13 +135,13 @@ def handle_detection(label, confidence, frame):
         if response.status_code == 200:
             print("[INFO] Synced to primary backend successfully.")
         else:
-            print(f"[WARNING] Primary backend rejected send (Status: {response.status_code}). Saving to SQLite.")
+            print(f"[WARNING] Backend rejected send (Status: {response.status_code}). Saving to SQLite.")
             save_alert_to_backup(alert_payload)
     except requests.exceptions.Timeout:
         print("[WARNING] Connection timed out (10s limit). Saving to backup cache.")
         save_alert_to_backup(alert_payload)
     except requests.exceptions.RequestException:
-        print("[WARNING] Primary backend unreachable. Saving to backup cache.")
+        print("[WARNING] Backend unreachable. Saving to backup cache.")
         save_alert_to_backup(alert_payload)
 
 
@@ -181,6 +181,7 @@ while True:
             if confidence > CONFIDENCE_THRESHOLD:
                 class_id = int(detections[0, 0, i, 1])
                 label = CLASSES[class_id]
+                
 
                 if label in TARGET_CLASSES:
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
