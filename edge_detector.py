@@ -195,6 +195,8 @@ while True:
                         last_trigger_time = current_time
 
     cv2.imshow("Farm Monitor Feed", frame)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
 
 vs.release()
 cv2.destroyAllWindows()
