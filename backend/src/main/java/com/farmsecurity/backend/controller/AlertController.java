@@ -18,19 +18,7 @@ public class AlertController {
     @Autowired
     private AlertRepository alertRepository;
 
-    @Autowired
-    private TelegramNotificationService telegramService; 
-
-    @PostMapping
-    public Alert createAlert(@RequestBody Alert newAlert) {
-       
-        Alert savedAlert = alertRepository.save(newAlert);
-        
-
-        telegramService.sendIntrusionAlert(savedAlert.getIntruderType(), savedAlert.getConfidence());
-        
-        return savedAlert;
-    }
+    
     @GetMapping
     public List<Alert> getAllAlerts(){
         List<Alert> allAlerts = alertRepository.findAll();
