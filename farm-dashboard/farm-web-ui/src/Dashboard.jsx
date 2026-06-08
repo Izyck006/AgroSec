@@ -56,7 +56,7 @@ const Dashboard = () => {
               <span className="text-[#316631]">Agro</span>
               <span className="text-emerald-800">Sec</span>
             </h1>
-            <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Farm Security & Intrusion Monitoring</p>
+            <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Farm Deterrance & Intrusion Monitoring</p>
           </div>
           
           {/* Crisp, professional connection badge */}
@@ -92,7 +92,7 @@ const Dashboard = () => {
         {/* Alert Feed Table Section */}
         <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden flex flex-col">
           <div className="px-6 py-5 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
-            <h2 className="text-lg font-bold text-stone-800">Farm Activity Logs</h2>
+            <h2 className="text-lg font-bold text-stone-800">Farm Security Logs</h2>
             {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing...</span>}
           </div>
           
@@ -100,10 +100,10 @@ const Dashboard = () => {
             <table className="w-full min-w-[700px] text-left border-collapse">
               <thead>
                 <tr className="bg-stone-50 text-stone-500 text-xs font-bold tracking-widest uppercase border-b border-stone-200">
-                  <th className="px-6 py-4">Snapshot</th>
+                  <th className="px-6 py-4">Image</th>
                   <th className="px-6 py-4">Time</th>
                   <th className="px-6 py-4">Intrusion Type</th>
-                  <th className="px-6 py-4">Confidence</th>
+                  <th className="px-6 py-4">Threat Lvl</th>
                   <th className="px-6 py-4">Action Taken</th>
                 </tr>
               </thead>
@@ -125,7 +125,7 @@ const Dashboard = () => {
                           <div className="relative w-24 h-16 rounded overflow-hidden border border-stone-200 shadow-sm hover:scale-125 transition-transform cursor-pointer origin-left z-10">
                             <img 
                               src={`data:image/jpeg;base64,${alert.imageData}`} 
-                              alt="Intruder Snapshot" 
+                              alt="Intruder Image" 
                               className="w-full h-full object-cover"
                             />
                           </div>
