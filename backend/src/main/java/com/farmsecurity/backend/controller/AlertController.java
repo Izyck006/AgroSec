@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.farmsecurity.backend.model.Alert;
 import com.farmsecurity.backend.repository.AlertRepository;
-import com.farmsecurity.backend.service.TelegramNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
