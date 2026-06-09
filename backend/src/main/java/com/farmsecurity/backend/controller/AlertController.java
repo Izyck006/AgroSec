@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.farmsecurity.backend.model.Alert;
 import com.farmsecurity.backend.repository.AlertRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/alerts")
@@ -16,6 +14,11 @@ public class AlertController {
     @Autowired
     private AlertRepository alertRepository;
 
+     @PostMapping
+    public Alert createAlert(@RequestBody Alert alert) {
+        return alertRepository.save(alert);
+    }
+
     @GetMapping
     public List<Alert> getAllAlerts(){
         List<Alert> allAlerts = alertRepository.findAll();
@@ -23,9 +26,5 @@ public class AlertController {
         return allAlerts.stream().limit(20).collect(Collectors.toList());
     }
 
-
-    @PostMapping
-    public Alert createAlert(@RequestBody Alert alert) {
-        return alertRepository.save(alert);
-    }
+   
 }
