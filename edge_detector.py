@@ -101,7 +101,7 @@ sync_thread.start()
 
 
 def handle_detection(label, confidence, frame):
-    actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
+    actual_time = time.strftime("D%Y-%m-%d T%H:%M:%S")
     print(f"\n[!!!] DETECTED A: {label.upper()} ({actual_time})")
     
     status_message = "Audio Deterrent"

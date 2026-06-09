@@ -1,28 +1,27 @@
 @echo off
-title AgroSec Startup Manager
+title AgroSec Automation
 echo ===================================================
-echo   Starting AgroSec: Edge-Driven Security System...
+echo              STARTING AGROSEC
 echo ===================================================
-echo.
 
-echo [1/3] Booting up Java Spring Boot Backend...
+echo [1/3] Launching Spring Boot Backend...
 
-start "Farm Backend (Java)" cmd /k "cd backend && .\mvnw.cmd spring-boot:run"
+start cmd /k "cd /d C:\Users\T470\Downloads\Project\backend && .\mvnw.cmd spring-boot:run"
 
-echo [2/3] Booting up React Dashboard...
+timeout /t 25
 
-start "Farm Dashboard (React)" cmd /k "cd farm-dashboard\farm-web-ui && npm run dev"
+echo [2/3] Launching Ngrok Server Tunnel...
 
-echo Waiting 5 seconds for the Java server to wake up...
-timeout /t 5 /nobreak > NUL
+start cmd /k "ngrok http --domain=reproach-sinner-femur.ngrok-free.dev 8080"
 
-echo [3/3] Booting up Python Edge Node...
 
-start "Farm Edge Node (Python)" cmd /k "python edge_detector.py"
+timeout /t 18
 
-echo.
+echo [3/3] Launching Python Edge AI Camera...
+
+start cmd /k "cd /d C:\Users\T470\Downloads\Project && python edge_detector.py"
+
 echo ===================================================
-echo ALL SYSTEMS LAUNCHED SUCCESSFULLY!
-echo You can now close this main launcher window.
+echo         ALL SYSTEMS ARE LIVE
 echo ===================================================
 pause

@@ -112,7 +112,6 @@ const Dashboard = () => {
                   <tr>
                     <td colSpan="5" className="px-6 py-12 text-center text-stone-500 font-medium bg-stone-50/30">
                       <div className="flex flex-col items-center justify-center">
-                        <svg className="w-10 h-10 mb-3 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         No movement detected. The farm perimeter is clear.
                       </div>
                     </td>
@@ -147,7 +146,6 @@ const Dashboard = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="inline-flex items-center text-emerald-700 font-bold text-xs tracking-wide uppercase">
-                          <svg className="w-4 h-4 mr-1.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                           {alert.status}
                         </span>
                       </td>
