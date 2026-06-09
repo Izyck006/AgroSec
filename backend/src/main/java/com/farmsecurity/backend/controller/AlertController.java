@@ -1,6 +1,5 @@
 package com.farmsecurity.backend.controller;
 
-
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +16,16 @@ public class AlertController {
     @Autowired
     private AlertRepository alertRepository;
 
-    
     @GetMapping
     public List<Alert> getAllAlerts(){
         List<Alert> allAlerts = alertRepository.findAll();
         Collections.reverse(allAlerts);
         return allAlerts.stream().limit(20).collect(Collectors.toList());
+    }
+
+
+    @PostMapping
+    public Alert createAlert(@RequestBody Alert alert) {
+        return alertRepository.save(alert);
     }
 }
