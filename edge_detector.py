@@ -88,6 +88,7 @@ def sync_cached_alerts_loop():
                             print(f"[SYNC] Synced alert from {cached_payload['timestamp']} successfully.")
                         else:
                             print(f"[SYNC] Backend rejected alert (Status: {response.status_code}). Stopping sync loop.")
+                            print(f"[SERVER SAID]: {response.text}")
                             break
                     except requests.exceptions.RequestException:
                         print("[SYNC] Backend still unreachable. Stopping sync loop.")
