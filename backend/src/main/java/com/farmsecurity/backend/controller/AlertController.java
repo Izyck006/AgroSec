@@ -16,7 +16,6 @@ public class AlertController {
     @Autowired
     private AlertRepository alertRepository;
 
-    // 1. The React Dashboard uses this to GET the data
     @GetMapping
     public List<Alert> getAllAlerts() {
         List<Alert> allAlerts = alertRepository.findAll();
@@ -24,7 +23,6 @@ public class AlertController {
         return allAlerts.stream().limit(20).collect(Collectors.toList());
     }
 
-    // 2. The Python Edge Node uses this to POST new alerts
     @PostMapping
     public Alert createAlert(@RequestBody Alert alert) {
         return alertRepository.save(alert);
