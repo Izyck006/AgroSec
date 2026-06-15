@@ -9,7 +9,7 @@ import sqlite3
 
 PRIMARY_API_URL = "http://localhost:8080/api/alerts"
 #To connect to phone camera
-#IP_CAMERA_URL = "http://192.168.0.154:8080/video"
+#IP_CAMERA_URL = "http://10.171.246.163:8080/video"
 
 DB_FILENAME = "agrosec_cache.db"
 CONFIDENCE_THRESHOLD = 0.85
