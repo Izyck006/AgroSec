@@ -14,3 +14,12 @@ __pycache__/
 .vscode/
 .idea/
 .DS_Store
+
+# Environment files (may contain secrets)
+.env
+.env.local
+.env.production
+*.env
+
+# Database files
+*.db

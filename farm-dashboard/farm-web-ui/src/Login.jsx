@@ -7,8 +7,8 @@ const Login = ({ onLoginSuccess }) => {
   const [errors, setErrors] = useState({ user: false, pass: false, auth: false });
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const VALID_USERNAME = 'admin';
-  const VALID_PASSWORD = 'admin123';
+  const VALID_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || 'admin';
+  const VALID_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'changeme';
 
   const handleLogin = () => {
     let valid = true;
