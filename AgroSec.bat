@@ -12,7 +12,7 @@ timeout /t 25
 
 echo [2/3] Launching Ngrok Server Tunnel...
 
-start cmd /k "ngrok http --domain=reproach-sinner-femur.ngrok-free.dev 8080"
+start cmd /k "ngrok http --domain=%NGROK_DOMAIN% 8080"
 
 
 timeout /t 18

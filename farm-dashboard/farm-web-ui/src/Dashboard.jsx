@@ -7,7 +7,8 @@ const Dashboard = () => {
 
   const fetchAlerts = async (isInitial = false) => {
     try {
-      const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/alerts', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/alerts';
+      const response = await fetch(apiUrl, {
         headers: { 'ngrok-skip-browser-warning': 'true' }
       });
       

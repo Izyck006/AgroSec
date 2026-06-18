@@ -3,11 +3,13 @@ import cv2
 import time
 import requests
 import base64
+import os
 import winsound
 import threading
 import sqlite3
 
-PRIMARY_API_URL = "http://localhost:8080/api/alerts"
+PRIMARY_API_URL = os.environ.get("AGROSEC_API_URL", "http://localhost:8080/api/alerts")
+API_KEY = os.environ.get("AGROSEC_API_KEY", "")
 #To connect to phone camera
 #IP_CAMERA_URL = "http://10.171.246.163:8080/video"
 
@@ -81,7 +83,10 @@ def sync_cached_alerts_loop():
                     }
 
                     try:
-                        response = requests.post(PRIMARY_API_URL, json=cached_payload, timeout=5)
+                        sync_headers = {"Content-Type": "application/json"}
+                        if API_KEY:
+                            sync_headers["X-API-Key"] = API_KEY
+                        response = requests.post(PRIMARY_API_URL, json=cached_payload, headers=sync_headers, timeout=5)
                         if response.status_code == 200:
                             cursor.execute("DELETE FROM alerts_cache WHERE id=?", (row_id,))
                             conn.commit()
@@ -130,9 +135,13 @@ def handle_detection(label, confidence, frame):
         "status": status_message
     }
    
+    headers = {"Content-Type": "application/json"}
+    if API_KEY:
+        headers["X-API-Key"] = API_KEY
+
     print("[INFO] Attempting sync with backend...")
     try:
-        response = requests.post(PRIMARY_API_URL, json=alert_payload, timeout=10)
+        response = requests.post(PRIMARY_API_URL, json=alert_payload, headers=headers, timeout=10)
         if response.status_code == 200:
             print("[INFO] Synced to primary backend successfully.")
         else:

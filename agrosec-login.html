@@ -134,8 +134,10 @@
 
   <script>
     
+    // WARNING: Client-side auth is NOT secure. Move to server-side auth for production.
+    // These defaults should be overridden via a proper auth backend.
     const VALID_USERNAME = 'admin';
-    const VALID_PASSWORD = 'admin123';
+    const VALID_PASSWORD = 'changeme';
 
     function handleLogin() {
       const username = document.getElementById('username').value.trim();
