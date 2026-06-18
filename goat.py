@@ -1,7 +1,9 @@
 import cv2
 import face_recognition
 
-from edge_detector import PRIMARY_API_URL, CONFIDENCE_THRESHOLD, net, save_alert_to_backup
+from config import PRIMARY_API_URL, CONFIDENCE_THRESHOLD
+from db_manager import save_alert
+from edge_detector import net
 import time
 
 img = cv2.imread('goat image.jpg')

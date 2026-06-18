@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ALERTS_ENDPOINT, POLL_INTERVAL_MS, FETCH_HEADERS } from './config';
 
 const Dashboard = () => {
   const [alerts, setAlerts] = useState([]);
@@ -7,8 +8,8 @@ const Dashboard = () => {
 
   const fetchAlerts = async (isInitial = false) => {
     try {
-      const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/alerts', {
-        headers: { 'ngrok-skip-browser-warning': 'true' }
+      const response = await fetch(ALERTS_ENDPOINT, {
+        headers: FETCH_HEADERS
       });
       
       if (!response.ok) throw new Error('Network response was not ok');
@@ -26,7 +27,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAlerts(true); 
-    const interval = setInterval(() => fetchAlerts(false), 3000); 
+    const interval = setInterval(() => fetchAlerts(false), POLL_INTERVAL_MS); 
     return () => clearInterval(interval); 
   }, []);
 
