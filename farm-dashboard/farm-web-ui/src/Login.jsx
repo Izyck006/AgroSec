@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Login.css'; // We will create this next
+import './Login.css';
 
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
@@ -30,7 +30,7 @@ const Login = ({ onLoginSuccess }) => {
 
     setTimeout(() => {
       if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-        onLoginSuccess(); // This unlocks the dashboard!
+        onLoginSuccess(); 
       } else {
         setErrors({ user: false, pass: false, auth: true });
         setPassword('');

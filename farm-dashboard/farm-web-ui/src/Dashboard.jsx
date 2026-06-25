@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react'; // Added useCallback
 
 const Dashboard = () => {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [connectionWarning, setConnectionWarning] = useState(false);
 
-  const fetchAlerts = async (isInitial = false) => {
+
+  const fetchAlerts = useCallback(async (isInitial = false) => {
     try {
       const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/alerts', {
         headers: { 'ngrok-skip-browser-warning': 'true' }
@@ -14,7 +15,8 @@ const Dashboard = () => {
       if (!response.ok) throw new Error('Network response was not ok');
       
       const data = await response.json();
-      setAlerts(data);
+      
+      setAlerts(Array.isArray(data) ? data : []); 
       setConnectionWarning(false); 
     } catch (err) {
       console.error("Silent poll fail:", err);
@@ -22,13 +24,14 @@ const Dashboard = () => {
     } finally {
       if (isInitial) setLoading(false);
     }
-  };
+  }, []); 
 
   useEffect(() => {
     fetchAlerts(true); 
     const interval = setInterval(() => fetchAlerts(false), 3000); 
     return () => clearInterval(interval); 
-  }, []);
+  
+  }, [fetchAlerts]); 
 
   const formatTime = (timestamp) => {
     if (!timestamp) return 'Unknown Time';
@@ -40,26 +43,22 @@ const Dashboard = () => {
   const recentIntruder = alerts.length > 0 ? alerts[0].intruderType.toUpperCase() : 'NONE';
 
   return (
-    
     <div className="min-h-screen bg-[#E9F7ED] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
       <div className="max-w-6xl mx-auto space-y-8">
         
-        {/* Header Section - Clean white with soft shadows */}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
           <div>
-            {/* Deep forest green for the branding */}
             <h1 className="text-3xl sm:text-4xl font-extrabold text-emerald-800 tracking-tight">
               Hey, Welcome Farmer!
             </h1>
-            {/* Split color AgroSec branding */}
+            
             <h1 className="text-2xl sm:text-2xl font-extrabold tracking-tight">
               <span className="text-[#316631]">Agro</span>
               <span className="text-emerald-800">Sec</span>
             </h1>
-            <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Farm Deterrance & Intrusion Monitoring</p>
+            <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Intrusion & Deterrance Model</p>
           </div>
           
-          {/* Crisp, professional connection badge */}
           <div className={`flex items-center px-4 py-2 rounded-lg border ${connectionWarning ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'} transition-colors duration-300`}>
             <span className={`flex h-2.5 w-2.5 rounded-full ${connectionWarning ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'} mr-2`}></span>
             <span className="text-sm font-bold tracking-wide uppercase">
@@ -68,31 +67,26 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {/* Analytics Cards - Grounded design with color-coded top borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Status Card */}
           <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-emerald-500 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">System Status</h3>
             <p className="text-2xl font-black text-emerald-700 tracking-tight">ARMED</p>
           </div>
 
-          {/* Intrusions Card */}
           <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-stone-400 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Total Intrusions</h3>
             <p className="text-3xl font-black text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
           </div>
 
-          {/* Threat Card */}
           <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-amber-500 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Latest Threat</h3>
             <p className="text-3xl font-black text-amber-600 tracking-tight">{recentIntruder}</p>
           </div>
         </div>
 
-        {/* Alert Feed Table Section */}
         <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden flex flex-col">
           <div className="px-6 py-5 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
-            <h2 className="text-lg font-bold text-stone-800">Farm Security Logs</h2>
+            <h2 className="text-lg font-bold text-stone-800">Security Logs</h2>
             {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing...</span>}
           </div>
           
@@ -112,7 +106,7 @@ const Dashboard = () => {
                   <tr>
                     <td colSpan="5" className="px-6 py-12 text-center text-stone-500 font-medium bg-stone-50/30">
                       <div className="flex flex-col items-center justify-center">
-                        No movement detected. The farm perimeter is clear.
+                        No intrusion detected. The farm is clear. 
                       </div>
                     </td>
                   </tr>
@@ -142,7 +136,8 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap font-medium text-stone-600 text-sm">
-                        {alert.confidence.toFixed(1)}%
+                        
+                        {Number(alert.confidence || 0).toFixed(1)}%
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="inline-flex items-center text-emerald-700 font-bold text-xs tracking-wide uppercase">
