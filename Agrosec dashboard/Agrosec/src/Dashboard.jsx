@@ -68,17 +68,17 @@ const Dashboard = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-emerald-500 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
+          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">System Status</h3>
             <p className="text-2xl font-black text-emerald-700 tracking-tight">ARMED</p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-stone-400 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
+          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Total Intrusions</h3>
             <p className="text-3xl font-black text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-amber-500 border-x border-b border-stone-200 hover:shadow-md transition-shadow">
+          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Latest Threat</h3>
             <p className="text-3xl font-black text-amber-600 tracking-tight">{recentIntruder}</p>
           </div>
@@ -97,7 +97,7 @@ const Dashboard = () => {
                   <th className="px-6 py-4">Image</th>
                   <th className="px-6 py-4">Time</th>
                   <th className="px-6 py-4">Intrusion Type</th>
-                  <th className="px-6 py-4">Confidnece (%)</th>
+                  <th className="px-6 py-4">Confidence (%)</th>
                   <th className="px-6 py-4">Action Taken</th>
                 </tr>
               </thead>
