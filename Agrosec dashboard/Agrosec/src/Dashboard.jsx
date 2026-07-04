@@ -97,7 +97,7 @@ const Dashboard = () => {
                   <th className="px-6 py-4">Image</th>
                   <th className="px-6 py-4">Time</th>
                   <th className="px-6 py-4">Intrusion Type</th>
-                  <th className="px-6 py-4">Threat Lvl</th>
+                  <th className="px-6 py-4">Confidnece (%)</th>
                   <th className="px-6 py-4">Action Taken</th>
                 </tr>
               </thead>
