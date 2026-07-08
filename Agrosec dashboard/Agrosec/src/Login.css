@@ -1,182 +1,105 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.login-container {
-  min-height: 100vh;
-  background: #1b2b1b;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: 'DM Sans', sans-serif;
-  position: relative; /* Required for absolute child positioning */
-  overflow: hidden;   /* Prevents the ripple from creating scrollbars */
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* --- Your Existing Styles --- */
+    .login-container {
+      min-height: 100vh;
+      background: #1b2b1b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+    }
 
-.card {
-  width: 100%;
-  max-width: 380px;
-  padding: 2.5rem 2rem 2rem;
-}
+    .card {
+      width: 100%;
+      max-width: 380px;
+      padding: 2.5rem 2rem 2rem;
+    }
 
-.logo {
-  font-family: 'Syne', sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  color: #e8f0e8;
-  letter-spacing: -0.01em;
-  margin-bottom: 0.25rem;
-}
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #e8f0e8;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.25rem;
+    }
 
-.logo span { color: #6ab04c; }
+    .logo span { color: #6ab04c; }
 
-.tagline {
-  font-size: 12px;
-  color: #4d6b4d;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 2.5rem;
-}
+    .tagline {
+      font-size: 12px;
+      color: #4d6b4d;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
 
-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #699569;
-  margin-bottom: 6px;
-}
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #699569;
+      margin-bottom: 6px;
+    }
 
-input {
-  display: block;
-  width: 100%;
-  background: #111a11;
-  border: 1px solid #1e2e1e;
-  border-radius: 6px;
-  padding: 11px 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  color: #e8f0e8;
-  outline: none;
-  transition: border-color 0.2s;
-  margin-bottom: 1.1rem;
-}
+    input {
+      display: block;
+      width: 100%;
+      background: #111a11;
+      border: 1px solid #1e2e1e;
+      border-radius: 6px;
+      padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: #e8f0e8;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 1.1rem;
+    }
 
-input::placeholder { color: #2d422d; }
-input:focus { border-color: #3d6b2a; }
-input.err { border-color: #7a2020; }
+    input::placeholder { color: #2d422d; }
 
-.error-msg {
-  font-size: 11px;
-  color: #c0392b;
-  margin-top: -10px;
-  margin-bottom: 10px;
-  display: none;
-}
+    input:focus { border-color: #3d6b2a; }
 
-.error-msg.show { display: block; }
+    input.err { border-color: #7a2020; }
 
-button {
-  width: 100%;
-  padding: 12px;
-  background: #3a6b28;
-  border: none;
-  border-radius: 6px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #e8f0e8;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 0.5rem;
-}
+    .error-msg {
+      font-size: 11px;
+      color: #c0392b;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      display: none;
+    }
 
-button:hover { background: #4d8a35; }
-button:active { background: #2e5520; }
-button:disabled { background: #1e3018; color: #3a5030; cursor: not-allowed; }
+    .error-msg.show { display: block; }
 
-.footer {
-  position: absolute; /* Changed from fixed to flow with the container fade */
-  bottom: 1.5rem;
-  width: 100%;
-  text-align: center;
-  font-size: 11px;
-  color: #7abc7a;
-  letter-spacing: 0.04em;
-}
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3a6b28;
+      border: none;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #e8f0e8;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
 
-/* --- Animation Sequence Styles --- */
+    button:hover { background: #4d8a35; }
+    button:active { background: #2e5520; }
+    button:disabled { background: #1e3018; color: #3a5030; cursor: not-allowed; }
 
-/* The approach walk */
-.hero-chicken {
-  position: absolute;
-  width: 180px;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.chicken-approach {
-  transform: scale(0.1) translateY(200px);
-  opacity: 0;
-  animation: approachScreen 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-@keyframes approachScreen {
-  0% { transform: scale(0.1) translateY(200px); opacity: 0; }
-  100% { transform: scale(1.5) translateY(0); opacity: 1; }
-}
-
-/* The screen strike */
-.chicken-peck {
-  transform-origin: center center;
-  animation: peckScreen 0.4s ease-in-out forwards;
-}
-
-@keyframes peckScreen {
-  0% { transform: scale(1.5) translateZ(0) rotate(0deg); }
-  50% { transform: scale(2.2) translateZ(50px) rotate(15deg); }
-  100% { transform: scale(1.8) translateZ(0) rotate(0deg); }
-}
-
-/* The shockwave */
-.ripple-hidden { display: none; }
-
-.ripple-active {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  /* Tinted green to match your theme */
-  box-shadow: 0 0 0 0 rgba(106, 176, 76, 0.4);
-  animation: screenWave 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-  z-index: 10;
-}
-
-@keyframes screenWave {
-  0% { box-shadow: 0 0 0 0 rgba(106, 176, 76, 0.4), 0 0 0 0 rgba(106, 176, 76, 0.2); }
-  100% { box-shadow: 0 0 0 150vw rgba(27, 43, 27, 0), 0 0 0 200vw rgba(27, 43, 27, 0); }
-}
-
-/* The UI Reveal */
-.login-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  z-index: 20;
-}
-
-.panel-hidden {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
-}
-
-.panel-visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  pointer-events: all;
-}
+    .footer {
+      position: fixed;
+      bottom: 1.5rem;
+      font-size: 11px;
+      color: #7abc7a;
+      letter-spacing: 0.04em;
+    }
