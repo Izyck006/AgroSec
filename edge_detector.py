@@ -8,8 +8,6 @@ import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-IP_CAMERA_URL = "http://10.56.115.28:8080/video"
-
 DB_FILENAME = "agrosec.db"
 CONFIDENCE_THRESHOLD = 0.85
 TARGET_CLASSES = ["person", "cow", "sheep"]
@@ -22,12 +20,10 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
            "sofa", "train", "tvmonitor"]
 
-# --- DATABASE SETUP ---
 def init_local_db():
     try:
         conn = sqlite3.connect(DB_FILENAME)
         cursor = conn.cursor()
-        # Created a permanent 'alerts' table with the 'status' column included
         cursor.execute('''CREATE TABLE IF NOT EXISTS alerts
                          (id INTEGER PRIMARY KEY AUTOINCREMENT,
                           intruderType TEXT,
@@ -43,7 +39,6 @@ def init_local_db():
 
 init_local_db()
 
-# --- FLASK MICRO-BACKEND ---
 app = Flask(__name__)
 CORS(app) 
 
@@ -53,7 +48,6 @@ def get_intrusions():
         conn = sqlite3.connect(DB_FILENAME, check_same_thread=False)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        # Pull the 50 most recent alerts for the React dashboard
         cursor.execute("SELECT * FROM alerts ORDER BY timestamp DESC LIMIT 50")
         rows = cursor.fetchall()
         conn.close()
@@ -62,11 +56,9 @@ def get_intrusions():
         return jsonify({"error": str(e)}), 500
 
 def run_server():
-    # Runs the API silently in the background
-    print("[INFO] Starting Edge API on port 8080...")
+    print("[INFO] Starting Edge API on port 8080")
     app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
 
-# --- DETECTION & STORAGE LOGIC ---
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
     print(f"\n[!!!] DETECTED A: {label.upper()} ({actual_time})")
@@ -74,7 +66,7 @@ def handle_detection(label, confidence, frame):
     status_message = "Audio Deterrent"
 
     if label == "person":
-        print("[ALERT] Human detected! Activating dog bark...")
+        print("[ALERT] Human detected! Activating dog bark")
         status_message = "Dog Bark"
         winsound.PlaySound("dog_bark.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
         
@@ -83,7 +75,6 @@ def handle_detection(label, confidence, frame):
         status_message = "Hyena Audio"
         winsound.PlaySound("hyena.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
 
-    # Encode image for the database
     frame_resized = cv2.resize(frame, (320, 240))
     _, buffer = cv2.imencode('.jpg', frame_resized)
     base64_image = base64.b64encode(buffer).decode('utf-8')
@@ -99,15 +90,12 @@ def handle_detection(label, confidence, frame):
     except Exception as e:
         print(f"[ERROR] Critical error writing to SQLite: {e}")
 
-# --- MAIN EXECUTION ---
 if __name__ == '__main__':
-    # 1. Start the Flask API on a separate thread
     api_thread = threading.Thread(target=run_server, daemon=True)
     api_thread.start()
 
-    # 2. Start the Camera Stream
     print("[INFO] Connecting to Camera Stream...")
-    vs = cv2.VideoCapture(IP_CAMERA_URL)
+    vs = cv2.VideoCapture(1)
     time.sleep(2.0)
 
     last_trigger_time = 0
@@ -115,7 +103,7 @@ if __name__ == '__main__':
     INFERENCE_INTERVAL = 0.5  
     last_inference_time = 0
 
-    # 3. Main OpenCV Loop
+ 
     while True:
         ret, frame = vs.read()
         if not ret:
