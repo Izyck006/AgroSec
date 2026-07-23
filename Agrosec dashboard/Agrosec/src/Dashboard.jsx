@@ -59,7 +59,7 @@ const Dashboard = () => {
             <p className="text-stone-500 font-medium mt-1 tracking-wide text-sm">Intrusion & Deterrance Model</p>
           </div>
           
-          <div className={`flex items-center px-4 py-2 ${connectionWarning ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'} transition-colors duration-300`}>
+          <div>
             <span className="text-sm font-bold tracking-wide uppercase">
               {connectionWarning ? 'Reconnecting Link...' : 'Active'}
             </span>
