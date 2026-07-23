@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   const fetchAlerts = useCallback(async (isInitial = false) => {
     try {
-      const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/alerts', {
+      const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/intrusions', {
         headers: { 'ngrok-skip-browser-warning': 'true' }
       });
       
