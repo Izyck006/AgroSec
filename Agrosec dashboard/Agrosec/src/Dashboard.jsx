@@ -46,7 +46,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-[#E9F7ED] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
       <div className="max-w-6xl mx-auto space-y-8">
         
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 p-6">
           <div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-emerald-800 tracking-tight">
               Hey, Welcome Farmer!
@@ -67,26 +67,26 @@ const Dashboard = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-6">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">System Status</h3>
             <p className="text-2xl font-black text-emerald-700 tracking-tight">ARMED</p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-6">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Total Intrusions</h3>
             <p className="text-3xl font-black text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-6">
             <h3 className="text-stone-500 text-xs font-bold tracking-widest uppercase mb-1">Latest Threat</h3>
             <p className="text-3xl font-black text-amber-600 tracking-tight">{recentIntruder}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden flex flex-col">
+        <div className="overflow-hidden flex flex-col">
           <div className="px-6 py-5 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
             <h2 className="text-lg font-bold text-stone-800">Security Logs</h2>
-            {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing...</span>}
+            {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing</span>}
           </div>
           
           <div className="overflow-x-auto w-full">

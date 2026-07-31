@@ -12,7 +12,7 @@ DB_FILENAME = "agrosec.db"
 CONFIDENCE_THRESHOLD = 0.85
 TARGET_CLASSES = ["person", "cow", "sheep"]
 
-print("[INFO] Loading MobileNet-SSD model...")
+
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt", "MobileNetSSD_deploy.caffemodel")
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -33,9 +33,9 @@ def init_local_db():
                           status TEXT)''')
         conn.commit()
         conn.close()
-        print("[INFO] Primary Edge SQLite Database Initialized.")
+        print("The SQLite Database Has Started.")
     except Exception as e:
-        print(f"[ERROR] Could not initialize SQLite database: {e}")
+        print(f"ERROR: Could not start SQLite database: {e}")
 
 init_local_db()
 
@@ -56,22 +56,22 @@ def get_intrusions():
         return jsonify({"error": str(e)}), 500
 
 def run_server():
-    print("[INFO] Starting Edge API on port 8080")
+    print("Starting Edge Server")
     app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
 
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-    print(f"\n[!!!] DETECTED A: {label.upper()} ({actual_time})")
+    print(f"\n[!] DETECTED A: {label.upper()} at ({actual_time})")
     
-    status_message = "Audio Deterrent"
+    status_message = "Audio Deterrance"
 
     if label == "person":
-        print("[ALERT] Human detected! Activating dog bark")
+        print("ALERT: Human detected! Activating dog bark")
         status_message = "Dog Bark"
         winsound.PlaySound("dog_bark.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
         
     elif label in ["cow", "sheep"]:
-        print(f"[ALERT] Livestock ({label}) detected! Activating predator sound...")
+        print(f"ALERT: Livestock ({label}) detected! Activating predator sound")
         status_message = "Hyena Audio"
         winsound.PlaySound("hyena.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
 
@@ -79,7 +79,7 @@ def handle_detection(label, confidence, frame):
     _, buffer = cv2.imencode('.jpg', frame_resized)
     base64_image = base64.b64encode(buffer).decode('utf-8')
 
-    print("[INFO] Committing threat directly to local database...")
+    print("INFO: Saving intrusion to local database")
     try:
         conn = sqlite3.connect(DB_FILENAME)
         cursor = conn.cursor()
@@ -88,13 +88,13 @@ def handle_detection(label, confidence, frame):
         conn.commit()
         conn.close()
     except Exception as e:
-        print(f"[ERROR] Critical error writing to SQLite: {e}")
+        print(f"Error writing to SQLite: {e}")
 
 if __name__ == '__main__':
     api_thread = threading.Thread(target=run_server, daemon=True)
     api_thread.start()
 
-    print("[INFO] Connecting to Camera Stream...")
+    print("Connecting to Camera Stream...")
     vs = cv2.VideoCapture(1)
     time.sleep(2.0)
 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     while True:
         ret, frame = vs.read()
         if not ret:
-            print("[ERROR] Failed to grab frame. Checking connection...")
+            print("ERROR: Failed to grab frame. Checking connection")
             break
         
         current_time = time.time()
