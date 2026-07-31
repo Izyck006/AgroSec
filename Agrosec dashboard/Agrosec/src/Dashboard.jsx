@@ -44,55 +44,55 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#E9F7ED] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-12">
         
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 p-6">
-          <div>
-            <h1 className="text-4xl sm:text-5xl font-black text-emerald-800 tracking-tight">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 p-6">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-emerald-800 tracking-tight mb-2">
               Hey, Welcome Farmer!
             </h1>
             
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-1">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
               <span className="text-[#316631]">Agro</span>
               <span className="text-emerald-800">Sec</span>
             </h1>
-            <p className="text-stone-500 font-semibold mt-2 tracking-wide text-base">Intrusion & Deterrance Model</p>
+            <p className="text-stone-500 font-medium tracking-wide text-base mt-2">Intrusion & Deterrance Model</p>
           </div>
           
           <div>
-            <span className="text-base font-extrabold tracking-wide uppercase">
+            <span className="text-base font-bold tracking-wide uppercase">
               {connectionWarning ? 'Reconnecting Link...' : 'Active'}
             </span>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6">
-            <h3 className="text-stone-500 text-sm font-extrabold tracking-widest uppercase mb-1">System Status</h3>
-            <p className="text-3xl font-black text-emerald-700 tracking-tight">ARMED</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+          <div className="p-6 flex flex-col gap-3">
+            <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">System Status</h3>
+            <p className="text-3xl font-extrabold text-emerald-700 tracking-tight">ARMED</p>
           </div>
 
-          <div className="p-6">
-            <h3 className="text-stone-500 text-sm font-extrabold tracking-widest uppercase mb-1">Total Intrusions</h3>
-            <p className="text-4xl font-black text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
+          <div className="p-6 flex flex-col gap-3">
+            <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">Total Intrusions</h3>
+            <p className="text-4xl font-extrabold text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
           </div>
 
-          <div className="p-6">
-            <h3 className="text-stone-500 text-sm font-extrabold tracking-widest uppercase mb-1">Latest Threat</h3>
-            <p className="text-4xl font-black text-amber-600 tracking-tight">{recentIntruder}</p>
+          <div className="p-6 flex flex-col gap-3">
+            <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">Latest Threat</h3>
+            <p className="text-4xl font-extrabold text-amber-600 tracking-tight">{recentIntruder}</p>
           </div>
         </div>
 
-        <div className="overflow-hidden flex flex-col">
-          <div className="px-6 py-5 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
-            <h2 className="text-xl font-extrabold text-stone-800">Security Logs</h2>
+        <div className="overflow-hidden flex flex-col mt-4">
+          <div className="px-6 py-6 border-b border-stone-200 flex justify-between items-center bg-stone-50/50">
+            <h2 className="text-xl font-bold text-stone-800">Security Logs</h2>
             {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing</span>}
           </div>
           
           <div className="overflow-x-auto w-full">
             <table className="w-full min-w-[700px] text-left border-collapse">
               <thead>
-                <tr className="bg-stone-50 text-stone-500 text-sm font-extrabold tracking-widest uppercase border-b border-stone-200">
+                <tr className="bg-stone-50 text-stone-500 text-sm font-bold tracking-widest uppercase border-b border-stone-200">
                   <th className="px-6 py-4">Image</th>
                   <th className="px-6 py-4">Time</th>
                   <th className="px-6 py-4">Intrusion Type</th>
