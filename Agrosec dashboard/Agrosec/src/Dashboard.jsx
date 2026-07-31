@@ -44,7 +44,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#E9F7ED] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
-      <div className="max-w-6xl mx-auto space-y-12">
+      <div className="max-w-6xl mx-auto flex flex-col gap-12">
         
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 p-6 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50">
           <div className="flex flex-col gap-2">
@@ -66,18 +66,18 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-          <div className="p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+          <div className="flex-1 p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">System Status</h3>
             <p className="text-3xl font-extrabold text-emerald-700 tracking-tight">ARMED</p>
           </div>
 
-          <div className="p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
+          <div className="flex-1 p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">Total Intrusions</h3>
             <p className="text-4xl font-extrabold text-stone-800 tracking-tight">{totalIntrusions > 0 ? totalIntrusions : '0'}</p>
           </div>
 
-          <div className="p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
+          <div className="flex-1 p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">Latest Threat</h3>
             <p className="text-4xl font-extrabold text-amber-600 tracking-tight">{recentIntruder}</p>
           </div>
