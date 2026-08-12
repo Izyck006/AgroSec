@@ -10,8 +10,7 @@ from flask_cors import CORS
 
 DB_FILENAME = "agrosec.db"
 CONFIDENCE_THRESHOLD = 0.85
-TARGET_CLASSES = ["person", "cow", "sheep"]
-
+TARGET_CLASSES = ["person", "cow", "sheep", "dog"]
 
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt", "MobileNetSSD_deploy.caffemodel")
 
@@ -70,7 +69,7 @@ def handle_detection(label, confidence, frame):
         status_message = "Dog Bark"
         winsound.PlaySound("dog_bark.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)
         
-    elif label in ["cow", "sheep"]:
+    elif label in ["cow", "sheep", "dog"]:
         print(f"ALERT: Livestock ({label}) detected! Activating predator sound")
         status_message = "Hyena Audio"
         winsound.PlaySound("hyena.wav", winsound.SND_FILENAME | winsound.SND_NODEFAULT)

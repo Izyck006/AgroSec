@@ -44,9 +44,9 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#E9F7ED] font-sans p-4 sm:p-6 lg:p-8 text-stone-800">
-      <div className="max-w-6xl mx-auto flex flex-col gap-12">
+      <div className="max-w-6xl mx-auto flex flex-col gap-6">
         
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 p-6 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50">
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-emerald-800 tracking-tight mb-2">
               Hey, Welcome Farmer!
@@ -66,7 +66,7 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           <div className="flex-1 p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">System Status</h3>
             <p className="text-3xl font-extrabold text-emerald-700 tracking-tight">ARMED</p>
@@ -83,8 +83,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 overflow-hidden flex flex-col mt-4">
-          <div className="px-6 py-6 border-b border-white/50 flex justify-between items-center bg-white/40">
+        <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 overflow-hidden flex flex-col">
+          <div className="px-6 py-4 border-b border-white/50 flex justify-between items-center bg-white/40">
             <h2 className="text-xl font-bold text-stone-800">Security Logs</h2>
             {loading && <span className="text-xs font-bold text-emerald-600 animate-pulse tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded border border-emerald-100">Syncing</span>}
           </div>
@@ -150,7 +150,7 @@ const Dashboard = () => {
             </table>
           </div>
         </div>
-        <footer className="mt-12 pb-6 text-center text-sm text-stone-500 font-medium">
+        <footer className="mt-8 pb-6 text-center text-sm text-stone-500 font-medium">
           &copy; 2026 AgroSec.
         </footer>
       </div>
