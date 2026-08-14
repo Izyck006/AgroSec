@@ -8,6 +8,7 @@ import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
 
+
 DB_FILENAME = "agrosec.db"
 CONFIDENCE_THRESHOLD = 0.85
 TARGET_CLASSES = ["person", "cow", "sheep", "dog"]
@@ -60,7 +61,8 @@ def run_server():
 
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-    print(f"\n[!] DETECTED A: {label.upper()} at ({actual_time})")
+    display_time = time.strftime("%A, %b %d, %Y at %I:%M:%S %p")
+    print(f"\n[!] DETECTED A: {label.upper()} on ({display_time}) at ({actual_time})")
     
     status_message = "Audio Deterrance"
 

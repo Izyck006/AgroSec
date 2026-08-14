@@ -32,7 +32,15 @@ const Dashboard = () => {
   const formatTime = (timestamp) => {
     if (!timestamp) return 'Unknown Time';
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return date.toLocaleString('en-US', { 
+      weekday: 'short',
+      month: 'short',   
+      day: 'numeric',   
+      year: 'numeric',  
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
   };
 
   const totalIntrusions = alerts.length;
