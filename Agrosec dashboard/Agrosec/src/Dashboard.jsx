@@ -1,16 +1,13 @@
-import { useState, useEffect, useCallback } from 'react'; // Added useCallback
+import { useState, useEffect, useCallback } from 'react'; 
 
 const Dashboard = () => {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [connectionWarning, setConnectionWarning] = useState(false);
 
-
   const fetchAlerts = useCallback(async (isInitial = false) => {
     try {
-      const response = await fetch('https://reproach-sinner-femur.ngrok-free.dev/api/intrusions', {
-        headers: { 'ngrok-skip-browser-warning': 'true' }
-      });
+      const response = await fetch('http://localhost:8080/api/intrusions');
       
       if (!response.ok) throw new Error('Network response was not ok');
       
@@ -30,7 +27,6 @@ const Dashboard = () => {
     fetchAlerts(true); 
     const interval = setInterval(() => fetchAlerts(false), 3000); 
     return () => clearInterval(interval); 
-  
   }, [fetchAlerts]); 
 
   const formatTime = (timestamp) => {
