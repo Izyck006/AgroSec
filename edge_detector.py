@@ -7,12 +7,15 @@ import threading
 import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
+from waitress import serve
 
 
 DB_FILENAME = "agrosec.db"
 CONFIDENCE_THRESHOLD = 0.85
 TARGET_CLASSES = ["person", "cow", "sheep", "dog"]
 
+
+print("MobileNet-SSD model loading...")
 net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt", "MobileNetSSD_deploy.caffemodel")
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -56,8 +59,8 @@ def get_intrusions():
         return jsonify({"error": str(e)}), 500
 
 def run_server():
-    print("Starting Edge Server")
-    app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+    print("Starting Edge")
+    serve(app, host='0.0.0.0', port=8080)
 
 def handle_detection(label, confidence, frame):
     actual_time = time.strftime("%Y-%m-%dT%H:%M:%S")

@@ -83,7 +83,7 @@ const Dashboard = () => {
 
           <div className="flex-1 p-6 flex flex-col gap-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 hover:shadow-md transition-shadow">
             <h3 className="text-stone-500 text-sm font-bold tracking-widest uppercase">Latest Threat</h3>
-            <p className="text-4xl font-extrabold text-amber-600 tracking-tight">{recentIntruder}</p>
+            <p className="text-4xl font-extrabold text-black-600 tracking-tight">{recentIntruder}</p>
           </div>
         </div>
 
@@ -132,18 +132,18 @@ const Dashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap font-semibold text-stone-600 text-sm">
                         {formatTime(alert.timestamp)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wide border
-                          ${alert.intruderType === 'person' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
-                          {alert.intruderType}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`text-xs font-bold uppercase tracking-wide
+                        ${alert.intruderType === 'person' ? 'text-black-700' : 'text-black-600'}`}>
+                        {alert.intruderType}
                         </span>
-                      </td>
+                        </td>
                       <td className="px-6 py-4 whitespace-nowrap font-medium text-stone-600 text-sm">
                         
                         {Number(alert.confidence || 0).toFixed(1)}%
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center text-emerald-700 font-bold text-xs tracking-wide uppercase">
+                        <span className="inline-flex items-center text-black-700 font-bold text-xs tracking-wide uppercase">
                           {alert.status}
                         </span>
                       </td>
